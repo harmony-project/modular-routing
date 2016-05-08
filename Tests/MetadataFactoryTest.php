@@ -30,7 +30,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->loader->expects($this->once())
             ->method('load')->with('routing.yml', 'ResourceType')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue([]));
 
         $this->assertEquals($collection, $this->factory->getMetadataCollection());
     }
@@ -59,7 +59,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->loader->expects($this->once())
             ->method('load')->with('routing.yml', 'ResourceType')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue([]));
 
         $this->assertFalse($this->factory->hasMetadataFor('test'));
 
