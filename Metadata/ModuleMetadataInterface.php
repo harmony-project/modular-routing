@@ -14,7 +14,7 @@ namespace Harmony\Component\ModularRouting\Metadata;
  * ModuleMetadataInterface is implemented by objects that hold the metadata
  * configuration for modules.
  *
- * @author Tim Goudriaan <tim@codedmonkey.com>
+ * @author Tim Goudriaan <tim@harmony-project.io>
  */
 interface ModuleMetadataInterface
 {

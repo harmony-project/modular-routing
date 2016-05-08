@@ -13,7 +13,7 @@ namespace Harmony\Component\ModularRouting\Model;
 /**
  * Module
  *
- * @author Tim Goudriaan <tim@codedmonkey.com>
+ * @author Tim Goudriaan <tim@harmony-project.io>
  */
 abstract class Module implements ModuleInterface
 {

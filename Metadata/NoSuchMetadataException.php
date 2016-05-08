@@ -17,7 +17,7 @@ use Exception;
  *
  * Exception thrown when metadata cannot be found.
  *
- * @author Tim Goudriaan <tim@codedmonkey.com>
+ * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class NoSuchMetadataException extends Exception
 {

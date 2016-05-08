@@ -19,7 +19,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
  *
  * TODO caching
  *
- * @author Tim Goudriaan <tim@codedmonkey.com>
+ * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class MetadataFactory implements MetadataFactoryInterface
 {
