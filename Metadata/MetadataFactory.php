@@ -72,7 +72,7 @@ class MetadataFactory implements MetadataFactoryInterface
             }
         }
 
-        throw new NoSuchMetadataException(sprintf('No metadata found for module type "%s".', $metadata->getType()));
+        throw new NoSuchMetadataException(sprintf('No metadata found for module type "%s".', $value));
     }
 
     /**
@@ -105,6 +105,10 @@ class MetadataFactory implements MetadataFactoryInterface
         $this->collection = [];
 
         $config = $this->loader->load($this->resource, $this->resourceType);
+
+        if (null === $config) {
+            return $this->collection;
+        }
 
         foreach ($config as $name => $options) {
             $metadata = new ModuleMetadata($options['name'], $options['type'], $options['routing']);
