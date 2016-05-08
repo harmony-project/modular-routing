@@ -11,6 +11,7 @@
 namespace Harmony\Component\ModularRouting\Tests\Metadata;
 
 use Harmony\Component\ModularRouting\Metadata\MetadataFactory;
+use Harmony\Component\ModularRouting\Metadata\NoSuchMetadataException;
 
 class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,12 +50,15 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->factory->hasMetadataFor('test'));
 
-        $r = new \ReflectionClass('Harmony\\Component\\ModularRouting\\Metadata\\ModuleMetadata');
+        $r = new \ReflectionClass('Harmony\Component\ModularRouting\Metadata\ModuleMetadata');
         $metadata = $r->newInstanceArgs(['Test', 'test', []]);
 
         $this->assertEquals($metadata, $this->factory->getMetadataFor('test'));
     }
 
+    /**
+     * @expectedException Harmony\Component\ModularRouting\Metadata\NoSuchMetadataException
+     */
     public function testUnconfiguredMetadata()
     {
         $this->loader->expects($this->once())
@@ -63,8 +67,6 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->factory->hasMetadataFor('test'));
 
-        $this->setExpectedException('Harmony\\Component\\ModularRouting\\Metadata\\NoSuchMetadataException');
-
-        $this->factory->getMetadataFor('test');
+        $this->factory->getMetadataFor('test'); // exception
     }
 }
