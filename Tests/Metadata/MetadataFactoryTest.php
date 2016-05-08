@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Tests;
+namespace Harmony\Component\ModularRouting\Tests\Metadata;
 
 use Harmony\Component\ModularRouting\Metadata\MetadataFactory;
 
