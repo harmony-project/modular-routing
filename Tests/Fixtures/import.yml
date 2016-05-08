@@ -1,0 +1,3 @@
+import_test:
+    resource: "valid.yml"
+    type:     yaml
