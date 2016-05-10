@@ -35,7 +35,7 @@ interface ProviderInterface
     public function getRouteCollectionByModule($module);
 
     /**
-     * Returns the route collection associated with a request
+     * Returns the Module instance associated with a request
      *
      * Required parameters:
      *
@@ -45,7 +45,8 @@ interface ProviderInterface
      * @param Request $request    The request
      * @param array   $parameters Parameters returned by an UrlMatcher
      *
-     * @return RouteCollection
+     * @return ModuleInterface
+     * @throws RouteNotFoundException If the module doesn't exist
      */
-    public function getRouteCollectionForRequest(Request $request, array $parameters = []);
+    public function getModuleByRequest(Request $request, array $parameters = []);
 }
