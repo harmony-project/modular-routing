@@ -41,7 +41,7 @@ class MetadataFactory implements MetadataFactoryInterface
     private $resource;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $resourceType;
 
@@ -50,7 +50,7 @@ class MetadataFactory implements MetadataFactoryInterface
      *
      * @param LoaderInterface $loader       A loader instance
      * @param mixed           $resource     The main resource to load
-     * @param mixed           $resourceType Type hint for the main resource (optional)
+     * @param string          $resourceType Type hint for the main resource (optional)
      */
     public function __construct(LoaderInterface $loader, $resource, $resourceType = null)
     {
