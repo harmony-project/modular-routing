@@ -65,7 +65,7 @@ class SimpleProvider implements ProviderInterface
      * @param ModuleManagerInterface   $moduleManager
      * @param string                   $routePrefix
      */
-    public function __construct(MetadataFactoryInterface $metadataFactory, LoaderInterface $loader, ModuleManagerInterface $moduleManager, $routePrefix)
+    public function __construct(MetadataFactoryInterface $metadataFactory, LoaderInterface $loader, ModuleManagerInterface $moduleManager, $routePrefix = '')
     {
         $this->metadataFactory = $metadataFactory;
         $this->loader          = $loader;
@@ -145,7 +145,7 @@ class SimpleProvider implements ProviderInterface
             throw new RouteNotFoundException(sprintf('Module with id "%s" does not exist.', $id));
         }
 
-        return $module->getType();
+        return $module;
     }
 
     /**
@@ -164,7 +164,7 @@ class SimpleProvider implements ProviderInterface
 
         // Match the module in _modular_segment
         $segment = $parameters['_modular_segment'];
-        $pos     = strrpos($segment, '/');
+        $pos     = strpos($segment, '/');
 
         return $pos ? substr($segment, 0, $pos) : $segment;
     }
