@@ -26,7 +26,7 @@ interface ModuleManagerInterface
      *
      * @param array $criteria The criteria
      *
-     * @return ModuleInterface
+     * @return ModuleInterface|null
      */
     public function findModuleBy(array $criteria);
 }
