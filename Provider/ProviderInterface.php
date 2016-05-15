@@ -42,7 +42,7 @@ interface ProviderInterface
      *   * _modular_segment: Segment of path to use to match the request against
      *                       a module.
      *
-     * @param Request $request    The request
+     * @param Request $request    The request to match
      * @param array   $parameters Parameters returned by an UrlMatcher
      *
      * @return ModuleInterface
