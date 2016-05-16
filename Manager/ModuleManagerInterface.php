@@ -22,6 +22,20 @@ use Harmony\Component\ModularRouting\Model\ModuleInterface;
 interface ModuleManagerInterface
 {
     /**
+     * Sets a reference to the current module
+     * 
+     * @param ModuleInterface|null $module
+     */
+    public function setCurrentModule(ModuleInterface $module = null);
+
+    /**
+     * Returns a reference to the current module
+     * 
+     * @return ModuleInterface|null
+     */
+    public function getCurrentModule();
+
+    /**
      * Finds a single Module entity by a set of criteria.
      *
      * @param array $criteria The criteria

@@ -18,7 +18,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
-class DoctrineModuleManager implements ModuleManagerInterface
+class DoctrineModuleManager extends ModuleManager implements ModuleManagerInterface
 {
     /**
      * @var ObjectRepository
