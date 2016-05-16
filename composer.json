@@ -13,8 +13,9 @@
   ],
   "require": {
     "php": ">=5.5.9",
-    "symfony/symfony": "~2.3",
-    "symfony-cmf/routing": "~1.1"
+    "symfony/symfony": "^2.7",
+    "symfony-cmf/routing": "^1.1",
+    "doctrine/orm": "^2.4.8"
   },
   "suggest": {
     "gedmo/doctrine-behaviors": "Modules can implement a nested tree structure"
