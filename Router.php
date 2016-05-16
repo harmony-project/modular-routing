@@ -193,22 +193,30 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
     }
 
     /**
-     * Returns a matcher for a Request
+     * Returns a matcher for a Module
      *
-     * @param Request $request    The request to match
-     * @param array   $parameters Parameters returned by an UrlMatcher
+     * @param ModuleInterface|int $module Module object or id
      *
      * @return UrlMatcherInterface|RequestMatcherInterface
      */
-    public function getMatcherForRequest(Request $request, array $parameters)
+    public function getMatcherForModule($module)
     {
-        $module     = $this->provider->getModuleByRequest($request, $parameters);
         $collection = $this->provider->getRouteCollectionByModule($module);
 
         // TODO caching
         $matcher = new $this->options['matcher_class']($collection, $this->context);
 
         return $matcher;
+    }
+
+    public function getModuleByRequest(Request $request)
+    {
+        $parameters = $this->getInitialMatcher()->matchRequest($request);
+
+        // Since a matcher throws an exception on failure, this will only be reached
+        // if the match was successful.
+
+        return $this->provider->getModuleByRequest($request, $parameters);
     }
 
     /**
@@ -263,12 +271,9 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
      */
     public function matchRequest(Request $request)
     {
-        $parameters = $this->getInitialMatcher()->matchRequest($request);
+        $module = $this->getModuleByRequest($request);
 
-        // Since a matcher throws an exception on failure, this will only be reached
-        // if the match was successful.
-
-        $matcher = $this->getMatcherForRequest($request, $parameters);
+        $matcher = $this->getMatcherForModule($module);
         if ($matcher instanceof UrlMatcherInterface) {
             $defaults = $matcher->match($request->getPathInfo());
         } else {
