@@ -16,7 +16,7 @@ use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use InvalidArgumentException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -121,7 +121,7 @@ class SimpleProvider implements ProviderInterface
             $module = $this->moduleManager->findModuleBy(['id' => $module]);
 
             if (!$module instanceof ModuleInterface) {
-                throw new RouteNotFoundException(sprintf('Module with id "%s" does not exist.', $module));
+                throw new ResourceNotFoundException(sprintf('Module with id "%s" does not exist.', $module));
             }
         }
 
@@ -142,7 +142,7 @@ class SimpleProvider implements ProviderInterface
         $module = $this->moduleManager->findModuleBy(['id' => $id]);
 
         if (null === $module) {
-            throw new RouteNotFoundException(sprintf('Module with id "%s" does not exist.', $id));
+            throw new ResourceNotFoundException(sprintf('Module with id "%s" does not exist.', $id));
         }
 
         return $module;
@@ -151,10 +151,10 @@ class SimpleProvider implements ProviderInterface
     /**
      * Filters the Module id from a request path
      *
-     * @param Request $request
-     * @param array   $parameters
+     * @param Request $request    The request to match
+     * @param array   $parameters Parameters returned by an UrlMatcher
      *
-     * @return int
+     * @return string
      */
     protected function matchRequest(Request $request, array $parameters = [])
     {

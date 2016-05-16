@@ -11,8 +11,9 @@
 namespace Harmony\Component\ModularRouting\Provider;
 
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
@@ -30,7 +31,7 @@ interface ProviderInterface
      * @param ModuleInterface|int $module Module object or id
      *
      * @return RouteCollection
-     * @throws RouteNotFoundException If the module doesn't exist
+     * @throws ResourceNotFoundException If the module doesn't exist
      */
     public function getRouteCollectionByModule($module);
 
@@ -46,7 +47,8 @@ interface ProviderInterface
      * @param array   $parameters Parameters returned by an UrlMatcher
      *
      * @return ModuleInterface
-     * @throws RouteNotFoundException If the module doesn't exist
+     * @throws InvalidArgumentException  If '_modular_segment' is not a valid parameter
+     * @throws ResourceNotFoundException If the module doesn't exist
      */
     public function getModuleByRequest(Request $request, array $parameters = []);
 }

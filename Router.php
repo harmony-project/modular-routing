@@ -15,7 +15,8 @@ use Harmony\Component\ModularRouting\Provider\ProviderInterface;
 use InvalidArgumentException;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -180,7 +181,7 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
      * @param ModuleInterface|int $module Module object or id
      *
      * @return UrlGeneratorInterface
-     * @throws RouteNotFoundException If the module doesn't exist
+     * @throws ResourceNotFoundException If the module doesn't exist
      */
     public function getGeneratorForModule($module)
     {
@@ -209,6 +210,15 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
         return $matcher;
     }
 
+    /**
+     * Returns a module by matching the request
+     *
+     * @param Request $request The request to match
+     *
+     * @return ModuleInterface
+     * @throws ResourceNotFoundException If no matching resource or module could be found
+     * @throws MethodNotAllowedException If a matching resource was found but the request method is not allowed
+     */
     public function getModuleByRequest(Request $request)
     {
         $parameters = $this->getInitialMatcher()->matchRequest($request);
