@@ -13,7 +13,6 @@ namespace Harmony\Component\ModularRouting\Provider;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 use Harmony\Component\ModularRouting\Metadata\MetadataFactoryInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
-use InvalidArgumentException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -115,16 +114,8 @@ class SimpleProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getRouteCollectionByModule($module)
+    public function getRouteCollectionByModule(ModuleInterface $module)
     {
-        if (!$module instanceof ModuleInterface) {
-            $module = $this->moduleManager->findModuleBy(['id' => $module]);
-
-            if (!$module instanceof ModuleInterface) {
-                throw new ResourceNotFoundException(sprintf('Module with id "%s" does not exist.', $module));
-            }
-        }
-
         // Get route collection
         $collection = $this->getRouteCollection($module->getType());
 
@@ -134,8 +125,62 @@ class SimpleProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      */
+    public function getModularSegment(ModuleInterface $module)
+    {
+        return $module->getId();
+    }
+
+    /**
+     * Returns the Module instance by a set of parameters
+     * 
+     * The "module" parameter is required to map the Module object, this can be either the Module object or a Module id
+     *
+     * @param array $parameters Parameters to match
+     *
+     * @return ModuleInterface
+     * @throws \InvalidArgumentException  If one of the parameters has an invalid value
+     * @throws ResourceNotFoundException If no module was matched to the parameters
+     */
+    public function getModuleByParameters(array $parameters)
+    {
+        if (!isset($parameters['module'])) {
+            throw new \InvalidArgumentException('The routing provider expects parameter "module" but could not be found.');
+        }
+
+        if ($parameters['module'] instanceof ModuleInterface) {
+            return $parameters['module'];
+        }
+
+        $id = $parameters['module'];
+
+        $module = $this->moduleManager->findModuleBy(['id' => $id]);
+
+        if (!$module instanceof ModuleInterface) {
+            throw new ResourceNotFoundException(sprintf('Module with id "%s" does not exist.', $id));
+        }
+
+        return $module;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getModuleByRequest(Request $request, array $parameters = [])
     {
+        if (null !== $module = $request->attributes->get('module')) {
+            if ($module instanceof ModuleInterface) {
+                return $module;
+            }
+
+            $module = $this->moduleManager->findModuleBy(['id' => $module]);
+
+            if (!$module instanceof ModuleInterface) {
+                throw new ResourceNotFoundException(sprintf('Module with path "%s" does not exist.', $module));
+            }
+
+            return $module;
+        }
+
         $id = $this->matchRequest($request, $parameters);
 
         // Get the related module
@@ -159,7 +204,7 @@ class SimpleProvider implements ProviderInterface
     protected function matchRequest(Request $request, array $parameters = [])
     {
         if (!isset($parameters['_modular_segment'])) {
-            throw new InvalidArgumentException('The parameter "_modular_segment" must be set.');
+            throw new \InvalidArgumentException('The parameter "_modular_segment" must be set.');
         }
 
         // Match the module in _modular_segment

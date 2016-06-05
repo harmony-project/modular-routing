@@ -12,7 +12,6 @@ namespace Harmony\Component\ModularRouting\Tests\Provider;
 
 use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
 use Harmony\Component\ModularRouting\Provider\SimpleProvider;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -48,6 +47,24 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($metadata));
 
         $this->assertEquals($collection, $this->provider->getRouteCollection('foo'));
+    }
+
+    public function testGetModuleByParametersWithId()
+    {
+        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+
+        $this->manager->expects($this->once())
+            ->method('findModuleBy')->with(['id' => 1])
+            ->will($this->returnValue($module));
+
+        $this->assertEquals($module, $this->provider->getModuleByParameters(['module' => 1]));
+    }
+
+    public function testGetModuleByParametersWithModule()
+    {
+        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+
+        $this->assertEquals($module, $this->provider->getModuleByParameters(['module' => $module]));
     }
 
     /**
@@ -90,7 +107,7 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
      * @dataProvider getInvalidRequests
      */
     public function testGetModuleByRequestThrowsExceptionOnInvalidPath($request, $parameters)
@@ -124,7 +141,7 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\RouteNotFoundException
+     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testGetModuleByRequestThrowsExceptionOnInvalidModule()
     {
@@ -135,17 +152,5 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider->getModuleByRequest(new Request, [
             '_modular_segment' => '1',
         ]);
-    }
-
-    /**
-     * @expectedException Symfony\Component\Routing\Exception\RouteNotFoundException
-     */
-    public function testGetRouteCollectionByModuleThrowsExceptionOnInvalidModule()
-    {
-        $this->manager->expects($this->once())
-            ->method('findModuleBy')->with(['id' => 1])
-            ->will($this->returnValue(null));
-
-        $this->provider->getRouteCollectionByModule(1);
     }
 }
