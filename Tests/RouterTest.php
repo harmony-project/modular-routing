@@ -78,16 +78,61 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->router->getOption('option_foo', true);
     }
 
-    public function testMatchRequest()
+    public function testGenerateWithId()
     {
-        $route  = new Route('/module/foo', ['test']);
+        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+
+        $this->provider->expects($this->once())
+            ->method('getModuleByParameters')
+            ->will($this->returnValue($module));
+
         $routes = new RouteCollection;
-        $routes->add('route_name', $route);
+        $routes->add('bar', new Route('/module/{module}'));
 
         $this->provider->expects($this->once())
             ->method('getRouteCollectionByModule')
             ->will($this->returnValue($routes));
 
-        $this->router->matchRequest(Request::create('/module/foo'));
+        $this->assertSame('/module/1', $this->router->generate('bar', ['module' => 1]));
+    }
+
+    public function testGenerateWithModule()
+    {
+        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+
+        $this->provider->expects($this->once())
+            ->method('getModularSegment')
+            ->will($this->returnValue('foo'));
+
+        $routes = new RouteCollection;
+        $routes->add('bar', new Route('/module/{module}'));
+
+        $this->provider->expects($this->once())
+            ->method('getRouteCollectionByModule')
+            ->will($this->returnValue($routes));
+
+        $this->assertSame('/module/foo', $this->router->generate('bar', ['module' => $module]));
+    }
+
+    public function testMatchRequest()
+    {
+        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+
+        $this->provider->expects($this->once())
+            ->method('getModuleByRequest')
+            ->will($this->returnValue($module));
+
+        $route  = new Route('/module/{module}');
+        $routes = new RouteCollection;
+        $routes->add('bar', $route);
+
+        $this->provider->expects($this->once())
+            ->method('getRouteCollectionByModule')
+            ->will($this->returnValue($routes));
+
+        $this->assertSame([
+            'module' => 'foo',
+            '_route' => 'bar',
+        ], $this->router->matchRequest(Request::create('/module/foo')));
     }
 }

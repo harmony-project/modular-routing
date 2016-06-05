@@ -28,17 +28,28 @@ interface ProviderInterface
     /**
      * Returns the route collection associated with a module
      *
-     * @param ModuleInterface|int $module Module object or id
+     * @param ModuleInterface $module
      *
      * @return RouteCollection
-     * @throws ResourceNotFoundException If the module doesn't exist
      */
-    public function getRouteCollectionByModule($module);
+    public function getRouteCollectionByModule(ModuleInterface $module);
+
+    /**
+     * Returns the Module instance by a set of parameters
+     *
+     * @param array $parameters Parameters to match
+     *
+     * @return ModuleInterface
+     * @throws InvalidArgumentException  If one of the parameters has an invalid value
+     * @throws ResourceNotFoundException If no module was matched to the parameters
+     */
+    public function getModuleByParameters(array $parameters);
 
     /**
      * Returns the Module instance associated with a request
      *
-     * Required parameters:
+     * If the request does not have a module attribute, this method can require the following
+     * parameters to be set to match the request to a Module:
      *
      *   * _modular_segment: Segment of path to use to match the request against
      *                       a module.
@@ -47,8 +58,17 @@ interface ProviderInterface
      * @param array   $parameters Parameters returned by an UrlMatcher
      *
      * @return ModuleInterface
-     * @throws InvalidArgumentException  If '_modular_segment' is not a valid parameter
-     * @throws ResourceNotFoundException If the module doesn't exist
+     * @throws InvalidArgumentException  If one of the parameters has an invalid value
+     * @throws ResourceNotFoundException If no module was matched to the request
      */
     public function getModuleByRequest(Request $request, array $parameters = []);
+
+    /**
+     * Returns the segment to identify the module in a request path
+     *
+     * @param ModuleInterface $module
+     *
+     * @return string
+     */
+    public function getModularSegment(ModuleInterface $module);
 }

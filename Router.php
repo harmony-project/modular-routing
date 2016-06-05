@@ -178,12 +178,11 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
     /**
      * Returns a generator for a Module
      *
-     * @param ModuleInterface|int $module Module object or id
+     * @param ModuleInterface $module
      *
      * @return UrlGeneratorInterface
-     * @throws ResourceNotFoundException If the module doesn't exist
      */
-    public function getGeneratorForModule($module)
+    public function getGeneratorForModule(ModuleInterface $module)
     {
         $collection = $this->provider->getRouteCollectionByModule($module);
 
@@ -196,11 +195,11 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
     /**
      * Returns a matcher for a Module
      *
-     * @param ModuleInterface|int $module Module object or id
+     * @param ModuleInterface $module
      *
      * @return UrlMatcherInterface|RequestMatcherInterface
      */
-    public function getMatcherForModule($module)
+    public function getMatcherForModule(ModuleInterface $module)
     {
         $collection = $this->provider->getRouteCollectionByModule($module);
 
@@ -253,15 +252,16 @@ class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterI
      */
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
-        if (!isset($parameters['module'])) {
-            throw new InvalidArgumentException('Parameter "module" does not exist.');
-        }
-
         if ($parameters['module'] instanceof ModuleInterface) {
-            $parameters['module'] = $parameters['module']->getId();
+            $module = $parameters['module'];
+            
+            $parameters['module'] = $this->provider->getModularSegment($module);
+        }
+        else {
+            $module = $this->provider->getModuleByParameters($parameters); // todo add exceptions to method doc block
         }
 
-        $generator = $this->getGeneratorForModule($parameters['module']);
+        $generator = $this->getGeneratorForModule($module);
 
         return $generator->generate($name, $parameters, $referenceType);
     }
