@@ -93,7 +93,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('getRouteCollectionByModule')
             ->will($this->returnValue($routes));
 
-        $this->assertSame('/module/1', $this->router->generate('bar', ['module' => 1]));
+        $this->assertEquals('/module/1', $this->router->generate('bar', ['module' => 1]));
     }
 
     public function testGenerateWithModule()
@@ -111,7 +111,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('getRouteCollectionByModule')
             ->will($this->returnValue($routes));
 
-        $this->assertSame('/module/foo', $this->router->generate('bar', ['module' => $module]));
+        $this->assertEquals('/module/foo', $this->router->generate('bar', ['module' => $module]));
     }
 
     public function testMatchRequest()
@@ -130,7 +130,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('getRouteCollectionByModule')
             ->will($this->returnValue($routes));
 
-        $this->assertSame([
+        $this->assertEquals([
             'module' => 'foo',
             '_route' => 'bar',
         ], $this->router->matchRequest(Request::create('/module/foo')));
