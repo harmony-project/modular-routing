@@ -73,56 +73,6 @@ class SimpleProvider implements ProviderInterface
     }
 
     /**
-     * Returns a prepared route collection
-     *
-     * @param string $type Module type
-     *
-     * @return RouteCollection
-     */
-    public function getRouteCollection($type)
-    {
-        if (isset($this->collections[$type])) {
-            return $this->collections[$type];
-        }
-
-        // Get related metadata
-        $metadata   = $this->metadataFactory->getMetadataFor($type);
-        $resources  = $metadata->getRouting();
-        $collection = new RouteCollection;
-
-        // Build route collection
-        foreach ($resources as $resource) {
-            $resourceType = isset($resource['type']) ? $resource['type'] : null;
-
-            $subCollection = $this->loader->load($resource['resource'], $resourceType);
-
-            $collection->addCollection($subCollection);
-        }
-
-        // Add routing prefix to the collection
-        $route = sprintf('%s/{module}', $this->routePrefix);
-
-        $collection->addPrefix(
-            $route,
-            [],
-            ['module' => '\d+']
-        );
-
-        return $this->collections[$type] = $collection;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRouteCollectionByModule(ModuleInterface $module)
-    {
-        // Get route collection
-        $collection = $this->getRouteCollection($module->getType());
-
-        return $collection;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getModularSegment(ModuleInterface $module)
@@ -191,6 +141,56 @@ class SimpleProvider implements ProviderInterface
         }
 
         return $module;
+    }
+
+    /**
+     * Returns a prepared route collection
+     *
+     * @param string $type Module type
+     *
+     * @return RouteCollection
+     */
+    public function getRouteCollection($type)
+    {
+        if (isset($this->collections[$type])) {
+            return $this->collections[$type];
+        }
+
+        // Get related metadata
+        $metadata   = $this->metadataFactory->getMetadataFor($type);
+        $resources  = $metadata->getRouting();
+        $collection = new RouteCollection;
+
+        // Build route collection
+        foreach ($resources as $resource) {
+            $resourceType = isset($resource['type']) ? $resource['type'] : null;
+
+            $subCollection = $this->loader->load($resource['resource'], $resourceType);
+
+            $collection->addCollection($subCollection);
+        }
+
+        // Add routing prefix to the collection
+        $route = sprintf('%s/{module}', $this->routePrefix);
+
+        $collection->addPrefix(
+            $route,
+            [],
+            ['module' => '\d+']
+        );
+
+        return $this->collections[$type] = $collection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRouteCollectionByModule(ModuleInterface $module)
+    {
+        // Get route collection
+        $collection = $this->getRouteCollection($module->getType());
+
+        return $collection;
     }
 
     /**

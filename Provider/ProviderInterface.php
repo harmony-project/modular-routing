@@ -11,7 +11,6 @@
 namespace Harmony\Component\ModularRouting\Provider;
 
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
@@ -26,13 +25,13 @@ use Symfony\Component\Routing\RouteCollection;
 interface ProviderInterface
 {
     /**
-     * Returns the route collection associated with a module
+     * Returns the segment to identify the module in a request path
      *
      * @param ModuleInterface $module
      *
-     * @return RouteCollection
+     * @return string
      */
-    public function getRouteCollectionByModule(ModuleInterface $module);
+    public function getModularSegment(ModuleInterface $module);
 
     /**
      * Returns the Module instance by a set of parameters
@@ -40,7 +39,7 @@ interface ProviderInterface
      * @param array $parameters Parameters to match
      *
      * @return ModuleInterface
-     * @throws InvalidArgumentException  If one of the parameters has an invalid value
+     * @throws \InvalidArgumentException If one of the parameters has an invalid value
      * @throws ResourceNotFoundException If no module was matched to the parameters
      */
     public function getModuleByParameters(array $parameters);
@@ -58,17 +57,17 @@ interface ProviderInterface
      * @param array   $parameters Parameters returned by an UrlMatcher
      *
      * @return ModuleInterface
-     * @throws InvalidArgumentException  If one of the parameters has an invalid value
+     * @throws \InvalidArgumentException If one of the parameters has an invalid value
      * @throws ResourceNotFoundException If no module was matched to the request
      */
     public function getModuleByRequest(Request $request, array $parameters = []);
 
     /**
-     * Returns the segment to identify the module in a request path
+     * Returns the route collection associated with a module
      *
      * @param ModuleInterface $module
      *
-     * @return string
+     * @return RouteCollection
      */
-    public function getModularSegment(ModuleInterface $module);
+    public function getRouteCollectionByModule(ModuleInterface $module);
 }
