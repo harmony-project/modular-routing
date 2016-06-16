@@ -27,7 +27,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Router
+ * ModularRouter
  *
  * This router uses custom Provider objects to retrieve RouteCollection instances.
  *
@@ -35,7 +35,7 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
-class Router implements RouterInterface, RequestMatcherInterface, ChainedRouterInterface
+class ModularRouter implements RouterInterface, RequestMatcherInterface, ChainedRouterInterface
 {
     /**
      * @var RequestContext

@@ -10,13 +10,12 @@
 
 namespace Harmony\Component\ModularRouting\Tests;
 
-use Harmony\Component\ModularRouting\Router;
-use InvalidArgumentException;
+use Harmony\Component\ModularRouting\ModularRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class RouterTest extends \PHPUnit_Framework_TestCase
+class ModularRouterTest extends \PHPUnit_Framework_TestCase
 {
     private $router   = null;
 
@@ -26,7 +25,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->provider = $this->getMock('Harmony\Component\ModularRouting\Provider\ProviderInterface');
 
-        $this->router = new Router($this->provider);
+        $this->router = new ModularRouter($this->provider);
     }
 
     public function testSetOptionsWithSupportedOptions()
@@ -41,7 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The Router does not support the following options: "option_foo", "option_bar"
      */
     public function testSetOptionsWithUnsupportedOptions()
@@ -61,7 +60,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The Router does not support the "option_foo" option
      */
     public function testSetOptionWithUnsupportedOption()
@@ -70,7 +69,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The Router does not support the "option_foo" option
      */
     public function testGetOptionWithUnsupportedOption()
