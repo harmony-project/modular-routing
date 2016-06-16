@@ -71,7 +71,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         $this->options = [
             'cache_dir'           => null,
             'debug'               => false,
-            'route_prefix'        => '/module',
+            'route_prefix'        => null,
             'strict_requirements' => true,
 
             'generator_class'        => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
