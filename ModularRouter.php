@@ -68,7 +68,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         $this->provider = $provider;
         $this->context  = $context ?: new RequestContext;
 
-        $this->options = array(
+        $this->options = [
             'cache_dir'           => null,
             'debug'               => false,
             'route_prefix'        => '/module',
@@ -81,7 +81,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
             'matcher_class'        => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
             'matcher_base_class'   => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
             'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper',
-        );
+        ];
 
         $this->setOptions($options);
     }
@@ -102,7 +102,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     public function setOptions(array $options)
     {
         // check option names and live merge, if errors are encountered Exception will be thrown
-        $invalid = array();
+        $invalid = [];
         foreach ($options as $key => $value) {
             if (array_key_exists($key, $this->options)) {
                 $this->options[$key] = $value;
@@ -304,7 +304,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     /**
      * {@inheritdoc}
      */
-    public function getRouteDebugMessage($name, array $parameters = array())
+    public function getRouteDebugMessage($name, array $parameters = [])
     {
         if (is_scalar($name)) {
             return $name;
