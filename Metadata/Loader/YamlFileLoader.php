@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Loader;
+namespace Harmony\Component\ModularRouting\Metadata\Loader;
 
 use InvalidArgumentException;
 use Symfony\Component\Config\Loader\FileLoader;

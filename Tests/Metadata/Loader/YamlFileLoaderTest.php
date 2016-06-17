@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Tests\Loader;
+namespace Harmony\Component\ModularRouting\Tests\Metadata\Loader;
 
-use Harmony\Component\ModularRouting\Loader\YamlFileLoader;
+use Harmony\Component\ModularRouting\Metadata\Loader\YamlFileLoader;
 use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 
@@ -31,7 +31,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadDoesNothingIfEmpty()
     {
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
 
         $this->assertEquals([], $loader->load('empty.yml'));
     }
@@ -42,7 +42,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadThrowsExceptionWithInvalidFile($filePath)
     {
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
         $loader->load($filePath);
     }
 
@@ -70,7 +70,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
 
         $this->assertEquals($collection, $loader->load('valid.yml'));
     }
@@ -90,7 +90,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
 
         $this->assertEquals($collection, $loader->load('import.yml'));
     }
