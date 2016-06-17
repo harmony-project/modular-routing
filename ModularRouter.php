@@ -12,7 +12,6 @@ namespace Harmony\Component\ModularRouting;
 
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\Provider\ProviderInterface;
-use InvalidArgumentException;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
@@ -97,7 +96,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      *
      * @param array $options An array of options
      *
-     * @throws InvalidArgumentException When unsupported option is provided
+     * @throws \InvalidArgumentException When unsupported option is provided
      */
     public function setOptions(array $options)
     {
@@ -112,7 +111,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         }
 
         if ($invalid) {
-            throw new InvalidArgumentException(sprintf('The Router does not support the following options: "%s".', implode('", "', $invalid)));
+            throw new \InvalidArgumentException(sprintf('The Router does not support the following options: "%s".', implode('", "', $invalid)));
         }
     }
 
@@ -122,12 +121,12 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      * @param string $key   The key
      * @param mixed  $value The value
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setOption($key, $value)
     {
         if (!array_key_exists($key, $this->options)) {
-            throw new InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
+            throw new \InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
         }
 
         $this->options[$key] = $value;
@@ -139,12 +138,12 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      * @param string $key The key
      *
      * @return mixed The value
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function getOption($key)
     {
         if (!array_key_exists($key, $this->options)) {
-            throw new InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
+            throw new \InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
         }
 
         return $this->options[$key];

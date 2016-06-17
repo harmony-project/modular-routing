@@ -11,7 +11,6 @@
 namespace Harmony\Component\ModularRouting\Tests\Metadata\Loader;
 
 use Harmony\Component\ModularRouting\Metadata\Loader\YamlFileLoader;
-use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 
 class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -37,7 +36,7 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @dataProvider getPathsToInvalidFiles
      */
     public function testLoadThrowsExceptionWithInvalidFile($filePath)
