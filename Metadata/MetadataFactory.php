@@ -111,6 +111,7 @@ class MetadataFactory implements MetadataFactoryInterface
      *
      * @param string $value
      *
+     * @return ModuleMetadata
      * @throws NoSuchMetadataException If no metadata exists for the given value
      */
     protected function loadMetadataFor($value)
