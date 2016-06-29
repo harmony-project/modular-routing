@@ -11,49 +11,41 @@
 namespace Harmony\Component\ModularRouting\Tests\Metadata;
 
 use Harmony\Component\ModularRouting\Metadata\MetadataFactory;
-use Harmony\Component\ModularRouting\Metadata\NoSuchMetadataException;
+use Symfony\Component\Routing\RouteCollection;
 
 class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    private $factory = null;
+    private $factory;
 
-    private $loader = null;
+    private $metadataLoader;
+
+    private $routingLoader;
 
     protected function setUp()
     {
-        $this->loader  = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
-        $this->factory = new MetadataFactory($this->loader, 'routing.yml', 'ResourceType');
-    }
-
-    public function testThatCollectionIsLoaded()
-    {
-        $collection = [];
-
-        $this->loader->expects($this->once())
-            ->method('load')->with('routing.yml', 'ResourceType')
-            ->will($this->returnValue([]));
-
-        $this->assertEquals($collection, $this->factory->getMetadataCollection());
+        $this->metadataLoader = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
+        $this->routingLoader  = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
+        $this->factory        = new MetadataFactory($this->metadataLoader, $this->routingLoader, 'routing.yml', 'ResourceType');
     }
 
     public function testConfiguredMetadata()
     {
-        $this->loader->expects($this->once())
+        $this->metadataLoader->expects($this->once())
             ->method('load')->with('routing.yml', 'ResourceType')
             ->will($this->returnValue([
                 [
-                    'name' => 'Test',
-                    'type' => 'test',
+                    'name' => 'Foo',
+                    'type' => 'foo',
                     'routing' => [],
                 ],
             ]));
 
-        $this->assertTrue($this->factory->hasMetadataFor('test'));
+        $this->assertTrue($this->factory->hasMetadataFor('foo'));
 
         $r = new \ReflectionClass('Harmony\Component\ModularRouting\Metadata\ModuleMetadata');
-        $metadata = $r->newInstanceArgs(['Test', 'test', []]);
+        $metadata = $r->newInstanceArgs(['Foo', 'foo', new RouteCollection]);
 
-        $this->assertEquals($metadata, $this->factory->getMetadataFor('test'));
+        $this->assertEquals($metadata, $this->factory->getMetadataFor('foo'));
     }
 
     /**
@@ -61,12 +53,12 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnconfiguredMetadata()
     {
-        $this->loader->expects($this->once())
+        $this->metadataLoader->expects($this->once())
             ->method('load')->with('routing.yml', 'ResourceType')
             ->will($this->returnValue([]));
 
-        $this->assertFalse($this->factory->hasMetadataFor('test'));
+        $this->assertFalse($this->factory->hasMetadataFor('bar'));
 
-        $this->factory->getMetadataFor('test'); // exception
+        $this->factory->getMetadataFor('bar'); // exception
     }
 }

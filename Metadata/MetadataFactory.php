@@ -11,13 +11,14 @@
 namespace Harmony\Component\ModularRouting\Metadata;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * MetadataFactory
  *
  * Returns {@link ModuleMetadataInterface} instances by module type.
  *
- * TODO caching
+ * todo caching
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -26,14 +27,26 @@ class MetadataFactory implements MetadataFactoryInterface
     /**
      * Collection of metadata instances
      *
-     * @var array|bool Is false before loading the collection
+     * @var array
      */
-    private $collection = false;
+    private $collection = [];
+
+    /**
+     * Collection of definitions
+     *
+     * @var array|bool Is false before loading definitions
+     */
+    private $definitions = false;
 
     /**
      * @var LoaderInterface
      */
-    private $loader;
+    private $metadataLoader;
+
+    /**
+     * @var LoaderInterface
+     */
+    private $routingLoader;
 
     /**
      * @var mixed
@@ -48,15 +61,17 @@ class MetadataFactory implements MetadataFactoryInterface
     /**
      * MetadataFactory constructor
      *
-     * @param LoaderInterface $loader       A loader instance
-     * @param mixed           $resource     The main resource to load
-     * @param string          $resourceType Type hint for the main resource (optional)
+     * @param LoaderInterface $metadataLoader A metadata loader instance
+     * @param LoaderInterface $routingLoader  A routing loader instance
+     * @param mixed           $resource       The main resource to load
+     * @param string          $resourceType   Type hint for the main resource (optional)
      */
-    public function __construct(LoaderInterface $loader, $resource, $resourceType = null)
+    public function __construct(LoaderInterface $metadataLoader, LoaderInterface $routingLoader, $resource, $resourceType = null)
     {
-        $this->loader       = $loader;
-        $this->resource     = $resource;
-        $this->resourceType = $resourceType;
+        $this->metadataLoader = $metadataLoader;
+        $this->routingLoader  = $routingLoader;
+        $this->resource       = $resource;
+        $this->resourceType   = $resourceType;
     }
 
     /**
@@ -64,15 +79,11 @@ class MetadataFactory implements MetadataFactoryInterface
      */
     public function getMetadataFor($value)
     {
-        $collection = $this->getMetadataCollection();
-
-        foreach ($collection as $metadata) {
-            if ($value == $metadata->getType()) {
-                return $metadata;
-            }
+        if (isset($this->collection[$value])) {
+            return $this->collection[$value];
         }
 
-        throw new NoSuchMetadataException(sprintf('No metadata found for module type "%s".', $value));
+        return $this->loadMetadataFor($value);
     }
 
     /**
@@ -80,10 +91,14 @@ class MetadataFactory implements MetadataFactoryInterface
      */
     public function hasMetadataFor($value)
     {
-        $collection = $this->getMetadataCollection();
+        if (isset($this->collection[$value])) {
+            return true;
+        }
 
-        foreach ($collection as $metadata) {
-            if ($value == $metadata->getType()) {
+        $definitions = $this->getDefinitions();
+
+        foreach ($definitions as $name => $options) {
+            if ($value == $options['type']) {
                 return true;
             }
         }
@@ -92,30 +107,62 @@ class MetadataFactory implements MetadataFactoryInterface
     }
 
     /**
-     * Returns the collection of metadata instance
+     * Loads metadata for a given type
+     *
+     * @param string $value
+     *
+     * @throws NoSuchMetadataException If no metadata exists for the given value
+     */
+    protected function loadMetadataFor($value)
+    {
+        $definitions = $this->getDefinitions();
+
+        foreach ($definitions as $name => $options) {
+            if ($value == $options['type']) {
+                $definition = $options;
+
+                break;
+            }
+        }
+
+        if (!isset($definition)) {
+            throw new NoSuchMetadataException(sprintf('No metadata found for module type "%s".', $value));
+        }
+
+        // Build route collection
+        $collection = new RouteCollection;
+
+        foreach ($definition['routing'] as $resource) {
+            $resourceType = isset($resource['type']) ? $resource['type'] : null;
+
+            $subCollection = $this->routingLoader->load($resource['resource'], $resourceType);
+
+            $collection->addCollection($subCollection);
+        }
+
+        // Build metadata
+        $metadata = new ModuleMetadata($definition['name'], $definition['type'], $collection);
+
+        return $this->collection[$definition['type']] = $metadata;
+    }
+
+    /**
+     * Returns the metadata definitions
      *
      * @return array|bool
      */
-    public function getMetadataCollection()
+    public function getDefinitions()
     {
-        if (false !== $this->collection) {
-            return $this->collection;
+        if (false !== $this->definitions) {
+            return $this->definitions;
         }
 
-        $this->collection = [];
-
-        $config = $this->loader->load($this->resource, $this->resourceType);
+        $config = $this->metadataLoader->load($this->resource, $this->resourceType);
 
         if (null === $config) {
-            return $this->collection;
+            return [];
         }
 
-        foreach ($config as $name => $options) {
-            $metadata = new ModuleMetadata($options['name'], $options['type'], $options['routing']);
-
-            $this->collection[$name] = $metadata;
-        }
-
-        return $this->collection;
+        return $this->definitions = $config;
     }
 }

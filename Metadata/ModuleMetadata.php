@@ -10,6 +10,8 @@
 
 namespace Harmony\Component\ModularRouting\Metadata;
 
+use Symfony\Component\Routing\RouteCollection;
+
 /**
  * ModuleMetadata
  *
@@ -28,20 +30,20 @@ class ModuleMetadata
     protected $type;
 
     /**
-     * @var array
+     * @var RouteCollection
      */
-    protected $routing;
+    protected $routes;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param array  $routing
+     * @param string          $name
+     * @param string          $type
+     * @param RouteCollection $routes
      */
-    public function __construct($name, $type, array $routing = [])
+    public function __construct($name, $type, RouteCollection $routes)
     {
-        $this->name     = $name;
-        $this->type     = $type;
-        $this->routing  = $routing;
+        $this->name   = $name;
+        $this->type   = $type;
+        $this->routes = $routes;
     }
 
     /**
@@ -63,8 +65,8 @@ class ModuleMetadata
     /**
      * {@inheritdoc}
      */
-    public function getRouting()
+    public function getRoutes()
     {
-        return $this->routing;
+        return $this->routes;
     }
 }

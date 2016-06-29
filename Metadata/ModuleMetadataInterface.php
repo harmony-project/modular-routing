@@ -10,9 +10,11 @@
 
 namespace Harmony\Component\ModularRouting\Metadata;
 
+use Symfony\Component\Routing\RouteCollection;
+
 /**
  * ModuleMetadataInterface is implemented by objects that hold the metadata
- * configuration for modules.
+ * configuration for modules
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -33,9 +35,9 @@ interface ModuleMetadataInterface
     public function getType();
 
     /**
-     * Returns a collection of routing resources
+     * Returns a collection of routes
      *
-     * @return array
+     * @return RouteCollection
      */
-    public function getRouting();
+    public function getRoutes();
 }

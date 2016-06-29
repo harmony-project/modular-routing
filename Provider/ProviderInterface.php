@@ -25,6 +25,13 @@ use Symfony\Component\Routing\RouteCollection;
 interface ProviderInterface
 {
     /**
+     * Adds the modular routing prefix to a route collection
+     *
+     * @param RouteCollection $routes
+     */
+    public function addModularPrefix(RouteCollection $routes);
+
+    /**
      * Returns the segment to identify the module in a request path
      *
      * @param ModuleInterface $module
@@ -50,8 +57,8 @@ interface ProviderInterface
      * If the request does not have a module attribute, this method can require the following
      * parameters to be set to match the request to a Module:
      *
-     *   * _modular_segment: Segment of path to use to match the request against
-     *                       a module.
+     *   * _modular_path: Remaining path to use to match the request against
+     *                    a module.
      *
      * @param Request $request    The request to match
      * @param array   $parameters Parameters returned by an UrlMatcher
@@ -61,13 +68,4 @@ interface ProviderInterface
      * @throws ResourceNotFoundException If no module was matched to the request
      */
     public function getModuleByRequest(Request $request, array $parameters = []);
-
-    /**
-     * Returns the route collection associated with a module
-     *
-     * @param ModuleInterface $module
-     *
-     * @return RouteCollection
-     */
-    public function getRouteCollectionByModule(ModuleInterface $module);
 }

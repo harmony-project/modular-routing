@@ -25,7 +25,7 @@ interface MetadataFactoryInterface
      * @param mixed $value The metadata for the value
      *
      * @return ModuleMetadataInterface
-     * @throws NoSuchMetadataException If no metadata exists for the given valu
+     * @throws NoSuchMetadataException If no metadata exists for the given value
      */
     public function getMetadataFor($value);
 

@@ -10,6 +10,7 @@
 
 namespace Harmony\Component\ModularRouting;
 
+use Harmony\Component\ModularRouting\Metadata\MetadataFactoryInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\Provider\ProviderInterface;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
@@ -37,9 +38,24 @@ use Symfony\Component\Routing\RouterInterface;
 class ModularRouter implements RouterInterface, RequestMatcherInterface, ChainedRouterInterface
 {
     /**
+     * @var RouteCollection[]
+     */
+    private $collections = [];
+
+    /**
      * @var RequestContext
      */
     private $context;
+
+    /**
+     * @var UrlMatcher
+     */
+    private $initialMatcher = null;
+
+    /**
+     * @var MetadataFactoryInterface
+     */
+    private $metadataFactory;
 
     /**
      * An array of options
@@ -58,14 +74,16 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     /**
      * Router constructor
      *
-     * @param ProviderInterface   $provider
-     * @param array               $options
-     * @param RequestContext|null $context
+     * @param ProviderInterface        $provider
+     * @param MetadataFactoryInterface $metadataFactory
+     * @param array                    $options
+     * @param RequestContext|null      $context
      */
-    public function __construct(ProviderInterface $provider, array $options = [], RequestContext $context = null)
+    public function __construct(ProviderInterface $provider, MetadataFactoryInterface $metadataFactory, array $options = [], RequestContext $context = null)
     {
-        $this->provider = $provider;
-        $this->context  = $context ?: new RequestContext;
+        $this->provider        = $provider;
+        $this->metadataFactory = $metadataFactory;
+        $this->context         = $context ?: new RequestContext;
 
         $this->options = [
             'cache_dir'           => null,
@@ -92,7 +110,6 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      *
      *   * cache_dir:      The cache directory (or null to disable caching)
      *   * debug:          Whether to enable debugging or not (false by default)
-     *   * route_prefix: The prefix
      *
      * @param array $options An array of options
      *
@@ -159,6 +176,38 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
+     * Returns the route collection for a module type
+     *
+     * @param string $type
+     *
+     * @return RouteCollection
+     */
+    public function getRouteCollectionForType($type)
+    {
+        if (isset($this->collections[$type])) {
+            return $this->collections[$type];
+        }
+
+        if (!$this->metadataFactory->hasMetadataFor($type)) {
+            throw new ResourceNotFoundException(sprintf('No metadata found for module type "%s".', $type));
+        }
+
+        $metadata = $this->metadataFactory->getMetadataFor($type);
+        $routes   = $metadata->getRoutes();
+
+        // Add modular prefix to the collection
+        $this->provider->addModularPrefix($routes);
+
+        // Add route prefix to the collection
+        if (null !== $this->options['route_prefix']) {
+            // todo configurable constraints
+            $routes->addPrefix($this->options['route_prefix']);
+        }
+
+        return $this->collections[$type] = $routes;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setContext(RequestContext $context)
@@ -183,9 +232,11 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getGeneratorForModule(ModuleInterface $module)
     {
-        $collection = $this->provider->getRouteCollectionByModule($module);
+        $type = $module->getType();
 
-        // TODO caching
+        $collection = $this->getRouteCollectionForType($type);
+
+        // todo caching
         $generator = new $this->options['generator_class']($collection, $this->context);
 
         return $generator;
@@ -200,9 +251,11 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getMatcherForModule(ModuleInterface $module)
     {
-        $collection = $this->provider->getRouteCollectionByModule($module);
+        $type = $module->getType();
 
-        // TODO caching
+        $collection = $this->getRouteCollectionForType($type);
+
+        // todo caching
         $matcher = new $this->options['matcher_class']($collection, $this->context);
 
         return $matcher;
@@ -234,16 +287,20 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getInitialMatcher()
     {
-        $route = sprintf('%s/{_modular_segment}', $this->options['route_prefix']);
+        if (null !== $this->initialMatcher) {
+            return $this->initialMatcher;
+        }
+        
+        $route = sprintf('%s/{_modular_path}', $this->options['route_prefix']);
 
         $collection = new RouteCollection;
         $collection->add('modular', new Route(
             $route,
             [],
-            ['_modular_segment' => '.+']
+            ['_modular_path' => '.+']
         ));
 
-        return new UrlMatcher($collection, $this->context);
+        return $this->initialMatcher = new UrlMatcher($collection, $this->context);
     }
 
     /**

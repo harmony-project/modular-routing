@@ -27,26 +27,9 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->factory = $this->getMockBuilder('Harmony\Component\ModularRouting\Metadata\MetadataFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loader  = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
         $this->manager = $this->getMock('Harmony\Component\ModularRouting\Manager\ModuleManagerInterface');
 
-        $this->provider = new SimpleProvider($this->factory, $this->loader, $this->manager, '');
-    }
-
-    public function testThatCollectionIsLoaded()
-    {
-        $collection = new RouteCollection;
-
-        $metadata = new ModuleMetadata('Foo', 'foo', []);
-
-        $this->factory->expects($this->once())
-            ->method('getMetadataFor')->with('foo')
-            ->will($this->returnValue($metadata));
-
-        $this->assertEquals($collection, $this->provider->getRouteCollection('foo'));
+        $this->provider = new SimpleProvider($this->manager);
     }
 
     public function testGetModuleByParametersWithId()
@@ -85,23 +68,23 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [new Request, [
-                '_modular_segment' => '1',
+                '_modular_path' => '1',
             ]],
             [new Request, [
-                '_modular_segment' => '1/',
+                '_modular_path' => '1/',
             ]],
             [new Request, [
-                '_modular_segment' => '1/bar',
+                '_modular_path' => '1/bar',
             ]],
             [new Request, [
-                '_modular_segment' => '1/bar/',
+                '_modular_path' => '1/bar/',
             ]],
             [new Request, [
-                '_modular_segment' => '1/a_long/and_winded/request_path/12a34b56c/9',
+                '_modular_path' => '1/a_long/and_winded/request_path/12a34b56c/9',
             ]],
             [new Request, [
-                '_modular_segment' => '1',
-                'some_parameter'   => 'bar',
+                '_modular_path'  => '1',
+                'some_parameter' => 'bar',
             ]],
         ];
     }
@@ -119,23 +102,23 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [new Request, [
-                '_modular_segment' => 'bar',
+                '_modular_path' => 'bar',
             ]],
             [new Request, [
-                '_modular_segment' => 'bar/',
+                '_modular_path' => 'bar/',
             ]],
             [new Request, [
-                '_modular_segment' => 'bar/1',
+                '_modular_path' => 'bar/1',
             ]],
             [new Request, [
-                '_modular_segment' => 'bar/1/',
+                '_modular_path' => 'bar/1/',
             ]],
             [new Request, [
-                '_modular_segment' => 'bar/12a34b56c/a_long/and_winded/request_path/9',
+                '_modular_path' => 'bar/12a34b56c/a_long/and_winded/request_path/9',
             ]],
             [new Request, [
-                '_modular_segment' => 'bar',
-                'some_parameter'   => 'foo',
+                '_modular_path'  => 'bar',
+                'some_parameter' => 'foo',
             ]],
         ];
     }
@@ -150,7 +133,7 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $this->provider->getModuleByRequest(new Request, [
-            '_modular_segment' => '1',
+            '_modular_path' => '1',
         ]);
     }
 }

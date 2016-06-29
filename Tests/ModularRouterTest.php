@@ -10,6 +10,7 @@
 
 namespace Harmony\Component\ModularRouting\Tests;
 
+use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
 use Harmony\Component\ModularRouting\ModularRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
@@ -17,15 +18,20 @@ use Symfony\Component\Routing\RouteCollection;
 
 class ModularRouterTest extends \PHPUnit_Framework_TestCase
 {
-    private $router   = null;
+    private $factory;
+    
+    private $router;
 
     private $provider = null;
 
     protected function setUp()
     {
+        $this->factory = $this->getMockBuilder('Harmony\Component\ModularRouting\Metadata\MetadataFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->provider = $this->getMock('Harmony\Component\ModularRouting\Provider\ProviderInterface');
 
-        $this->router = new ModularRouter($this->provider);
+        $this->router = new ModularRouter($this->provider, $this->factory);
     }
 
     public function testSetOptionsWithSupportedOptions()
@@ -88,9 +94,18 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
 
+        $metadata = new ModuleMetadata('Foo', 'foo', $routes);
+
+        $this->factory->expects($this->once())
+            ->method('hasMetadataFor')
+            ->will($this->returnValue(true));
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataFor')
+            ->will($this->returnValue($metadata));
+
         $this->provider->expects($this->once())
-            ->method('getRouteCollectionByModule')
-            ->will($this->returnValue($routes));
+            ->method('addModularPrefix');
 
         $this->assertEquals('/module/1', $this->router->generate('bar', ['module' => 1]));
     }
@@ -101,16 +116,25 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
 
         $this->provider->expects($this->once())
             ->method('getModularSegment')
-            ->will($this->returnValue('foo'));
+            ->will($this->returnValue('1'));
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
 
-        $this->provider->expects($this->once())
-            ->method('getRouteCollectionByModule')
-            ->will($this->returnValue($routes));
+        $metadata = new ModuleMetadata('Foo', 'foo', $routes);
 
-        $this->assertEquals('/module/foo', $this->router->generate('bar', ['module' => $module]));
+        $this->factory->expects($this->once())
+            ->method('hasMetadataFor')
+            ->will($this->returnValue(true));
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataFor')
+            ->will($this->returnValue($metadata));
+
+        $this->provider->expects($this->once())
+            ->method('addModularPrefix');
+
+        $this->assertEquals('/module/1', $this->router->generate('bar', ['module' => $module]));
     }
 
     public function testMatchRequest()
@@ -121,13 +145,21 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getModuleByRequest')
             ->will($this->returnValue($module));
 
-        $route  = new Route('/module/{module}');
         $routes = new RouteCollection;
-        $routes->add('bar', $route);
+        $routes->add('bar', new Route('/module/{module}'));
+
+        $metadata = new ModuleMetadata('Foo', 'foo', $routes);
+
+        $this->factory->expects($this->once())
+            ->method('hasMetadataFor')
+            ->will($this->returnValue(true));
+
+        $this->factory->expects($this->once())
+            ->method('getMetadataFor')
+            ->will($this->returnValue($metadata));
 
         $this->provider->expects($this->once())
-            ->method('getRouteCollectionByModule')
-            ->will($this->returnValue($routes));
+            ->method('addModularPrefix');
 
         $this->assertEquals([
             'module' => 'foo',
