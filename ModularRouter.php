@@ -65,6 +65,13 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     private $options = [];
 
     /**
+     * An array containing the route prefix data
+     *
+     * @var array
+     */
+    private $routePrefix = [];
+
+    /**
      * Provider object for retrieving route collections
      *
      * @var ProviderInterface
@@ -88,7 +95,6 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         $this->options = [
             'cache_dir'           => null,
             'debug'               => false,
-            'route_prefix'        => null,
             'strict_requirements' => true,
 
             'generator_class'        => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
@@ -98,6 +104,12 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
             'matcher_class'        => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
             'matcher_base_class'   => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
             'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper',
+        ];
+
+        $this->routePrefix = [
+            'path'         => '',
+            'defaults'     => [],
+            'requirements' => [],
         ];
 
         $this->setOptions($options);
@@ -169,6 +181,22 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     /**
      * {@inheritdoc}
      */
+    public function setContext(RequestContext $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRouteCollection()
     {
         // Since this Router has more than 1 route collection we return an empty RouteCollection
@@ -199,28 +227,29 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         $this->provider->addModularPrefix($routes);
 
         // Add route prefix to the collection
-        if (null !== $this->options['route_prefix']) {
-            // todo configurable constraints
-            $routes->addPrefix($this->options['route_prefix']);
-        }
+        $routes->addPrefix(
+            $this->routePrefix['path'],
+            $this->routePrefix['defaults'],
+            $this->routePrefix['requirements']
+        );
 
         return $this->collections[$type] = $routes;
     }
 
     /**
-     * {@inheritdoc}
+     * Sets the prefix for the path of all modular routes.
+     *
+     * @param string $prefix       An optional prefix to add before each pattern of the route collection
+     * @param array  $defaults     An array of default values
+     * @param array  $requirements An array of requirements
      */
-    public function setContext(RequestContext $context)
+    public function setRoutePrefix($prefix, array $defaults = [], array $requirements = [])
     {
-        $this->context = $context;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getContext()
-    {
-        return $this->context;
+        $this->routePrefix = [
+            'path'         => $prefix,
+            'defaults'     => $defaults,
+            'requirements' => $requirements,
+        ];
     }
 
     /**
@@ -290,14 +319,17 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         if (null !== $this->initialMatcher) {
             return $this->initialMatcher;
         }
-        
-        $route = sprintf('%s/{_modular_path}', $this->options['route_prefix']);
+
+        $route = sprintf('%s/{_modular_path}', $this->routePrefix['path']);
 
         $collection = new RouteCollection;
         $collection->add('modular', new Route(
             $route,
-            [],
-            ['_modular_path' => '.+']
+            $this->routePrefix['defaults'],
+            array_merge(
+                $this->routePrefix['requirements'],
+                ['_modular_path' => '.+']
+            )
         ));
 
         return $this->initialMatcher = new UrlMatcher($collection, $this->context);
@@ -340,10 +372,10 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         $module = $this->getModuleByRequest($request);
 
         $matcher = $this->getMatcherForModule($module);
-        if ($matcher instanceof UrlMatcherInterface) {
-            $defaults = $matcher->match($request->getPathInfo());
-        } else {
+        if ($matcher instanceof RequestMatcherInterface) {
             $defaults = $matcher->matchRequest($request);
+        } else {
+            $defaults = $matcher->match($request->getPathInfo());
         }
 
         return $defaults;
