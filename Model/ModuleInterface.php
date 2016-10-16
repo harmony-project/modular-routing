@@ -18,16 +18,23 @@ namespace Harmony\Component\ModularRouting\Model;
 interface ModuleInterface
 {
     /**
-     * Returns the type of related metadata
+     * Returns the segment to identify the module
      *
      * @return string
      */
-    public function getType();
+    public function getModularSegment();
 
     /**
-     * Set the type of related metadata
+     * Sets the type of the module
      *
      * @param string $type
      */
-    public function setType($type);
+    public function setModularType($type);
+
+    /**
+     * Returns the type of the module
+     *
+     * @return string
+     */
+    public function getModularType();
 }

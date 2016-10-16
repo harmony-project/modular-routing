@@ -25,7 +25,7 @@ abstract class Module implements ModuleInterface
     /**
      * @var string
      */
-    protected $type;
+    protected $modularType;
 
     /**
      * Get id
@@ -40,9 +40,17 @@ abstract class Module implements ModuleInterface
     /**
      * {@inheritdoc}
      */
-    public function setType($type)
+    public function getModularSegment()
     {
-        $this->type = $type;
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setModularType($type)
+    {
+        $this->modularType = $type;
 
         return $this;
     }
@@ -50,8 +58,8 @@ abstract class Module implements ModuleInterface
     /**
      * {@inheritdoc}
      */
-    public function getType()
+    public function getModularType()
     {
-        return $this->type;
+        return $this->modularType;
     }
 }
