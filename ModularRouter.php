@@ -261,7 +261,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getGeneratorForModule(ModuleInterface $module)
     {
-        $type = $module->getType();
+        $type = $module->getModularType();
 
         $collection = $this->getRouteCollectionForType($type);
 
@@ -280,7 +280,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getMatcherForModule(ModuleInterface $module)
     {
-        $type = $module->getType();
+        $type = $module->getModularType();
 
         $collection = $this->getRouteCollectionForType($type);
 
@@ -306,7 +306,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         // Since a matcher throws an exception on failure, this will only be reached
         // if the match was successful.
 
-        return $this->provider->getModuleByRequest($request, $parameters);
+        return $this->provider->loadModuleByRequest($request, $parameters);
     }
 
     /**
@@ -343,10 +343,10 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         if ($parameters['module'] instanceof ModuleInterface) {
             $module = $parameters['module'];
             
-            $parameters['module'] = $this->provider->getModularSegment($module);
+            $parameters['module'] = $module->getModularIdentity();
         }
         else {
-            $module = $this->provider->getModuleByParameters($parameters); // todo add exceptions to method doc block
+            $module = $this->provider->loadModuleByParameters($parameters); // todo add exceptions to method doc block
         }
 
         $generator = $this->getGeneratorForModule($module);
