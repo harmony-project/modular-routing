@@ -32,16 +32,7 @@ interface ProviderInterface
     public function addModularPrefix(RouteCollection $routes);
 
     /**
-     * Returns the segment to identify the module in a request path
-     *
-     * @param ModuleInterface $module
-     *
-     * @return string
-     */
-    public function getModularSegment(ModuleInterface $module);
-
-    /**
-     * Returns the Module instance by a set of parameters
+     * Loads the Module instance by a set of parameters
      *
      * @param array $parameters Parameters to match
      *
@@ -49,10 +40,10 @@ interface ProviderInterface
      * @throws \InvalidArgumentException If one of the parameters has an invalid value
      * @throws ResourceNotFoundException If no module was matched to the parameters
      */
-    public function getModuleByParameters(array $parameters);
+    public function loadModuleByParameters(array $parameters);
 
     /**
-     * Returns the Module instance associated with a request
+     * Loads the Module instance associated with a request
      *
      * If the request does not have a module attribute, this method can require the following
      * parameters to be set to match the request to a Module:
@@ -67,5 +58,5 @@ interface ProviderInterface
      * @throws \InvalidArgumentException If one of the parameters has an invalid value
      * @throws ResourceNotFoundException If no module was matched to the request
      */
-    public function getModuleByRequest(Request $request, array $parameters = []);
+    public function loadModuleByRequest(Request $request, array $parameters = []);
 }
