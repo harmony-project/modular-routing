@@ -36,6 +36,20 @@ interface ModuleManagerInterface
     public function getCurrentModule();
 
     /**
+     * Sets the value to use to identify a module
+     *
+     * @param string $identifier
+     */
+    public function setModularIdentifier($identifier);
+
+    /**
+     * Returns the value to use to identify a module
+     *
+     * @return string|null
+     */
+    public function getModularIdentifier();
+
+    /**
      * Finds a single Module entity by a set of criteria.
      *
      * @param array $criteria The criteria
@@ -43,4 +57,13 @@ interface ModuleManagerInterface
      * @return ModuleInterface|null
      */
     public function findModuleBy(array $criteria);
+
+    /**
+     * Finds a single Module entity by its identity.
+     *
+     * @param mixed $identity The identity
+     *
+     * @return ModuleInterface|null
+     */
+    public function findModuleByIdentity($identity);
 }

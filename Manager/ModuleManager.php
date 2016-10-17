@@ -30,6 +30,13 @@ abstract class ModuleManager implements ModuleManagerInterface
     private $currentModule = null;
 
     /**
+     * An optional value a ModuleManager can use to identify a module
+     *
+     * @var string|null
+     */
+    private $modularIdentifier = null;
+
+    /**
      * {@inheritdoc}
      */
     public function setCurrentModule(ModuleInterface $module = null)
@@ -43,5 +50,21 @@ abstract class ModuleManager implements ModuleManagerInterface
     public function getCurrentModule()
     {
         return $this->currentModule;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setModularIdentifier($identifier)
+    {
+        $this->modularIdentifier = $identifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModularIdentifier()
+    {
+        return $this->modularIdentifier;
     }
 }
