@@ -40,7 +40,7 @@ abstract class Module implements ModuleInterface
     /**
      * {@inheritdoc}
      */
-    public function getModularSegment()
+    public function getModularIdentity()
     {
         return $this->getId();
     }

@@ -18,11 +18,11 @@ namespace Harmony\Component\ModularRouting\Model;
 interface ModuleInterface
 {
     /**
-     * Returns the segment to identify the module
+     * Returns a value to identify the module
      *
      * @return string
      */
-    public function getModularSegment();
+    public function getModularIdentity();
 
     /**
      * Sets the type of the module
