@@ -43,4 +43,18 @@ class DoctrineModuleManager extends ModuleManager implements ModuleManagerInterf
     {
         return $this->repository->findOneBy($criteria);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findModuleByIdentity($identity)
+    {
+        $field = $this->getModularIdentifier();
+
+        if (null == $field) {
+            throw new \RuntimeException('The module manager is missing a modular identifier.');
+        }
+
+        return $this->repository->findOneBy([$field => $identity]);
+    }
 }
