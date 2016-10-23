@@ -37,6 +37,16 @@ class DoctrineModuleManager extends ModuleManager implements ModuleManagerInterf
     }
 
     /**
+     * Returns the Module repository
+     *
+     * @return ObjectRepository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function findModuleBy(array $criteria)
