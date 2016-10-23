@@ -73,7 +73,9 @@ class EntitySubscriber implements EventSubscriber
     }
 
     /**
-     * Handle actions when metadata is loaded
+     * Handles actions when metadata is loaded
+     *
+     * Creates an association for entities that inherit ModularTrait.
      *
      * @param LoadClassMetadataEventArgs $eventArgs
      */
@@ -82,6 +84,10 @@ class EntitySubscriber implements EventSubscriber
         $classMetadata = $eventArgs->getClassMetadata();
 
         if (null === $classMetadata->getReflectionClass() || false == $this->isModular($classMetadata)) {
+            return;
+        }
+
+        if ('Harmony\Component\ModularRouting\Model\StaticModule' == $this->getModuleClass()) {
             return;
         }
 
@@ -100,7 +106,10 @@ class EntitySubscriber implements EventSubscriber
     }
 
     /**
-     * Handle actions before creation of entity
+     * Handles actions before creation of an entity
+     *
+     * Sets the module of an entity to the current module defined
+     * by the module manager if it has been left empty.
      *
      * @param LifecycleEventArgs $args
      */
@@ -121,7 +130,7 @@ class EntitySubscriber implements EventSubscriber
     }
 
     /**
-     * Checks if the entity is modular
+     * Checks whether the entity inherits ModularTrait
      *
      * @param ClassMetadata $classMetadata Metadata of the class
      *
