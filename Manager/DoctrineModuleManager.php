@@ -56,6 +56,8 @@ class DoctrineModuleManager extends ModuleManager implements ModuleManagerInterf
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException if the identifier is not set
      */
     public function findModuleByIdentity($identity)
     {
