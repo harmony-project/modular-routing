@@ -13,12 +13,11 @@
   ],
   "require": {
     "php": ">=5.5.9",
-    "symfony/symfony": "^2.7",
-    "symfony-cmf/routing": "^1.1",
-    "doctrine/orm": "^2.4.8"
+    "symfony/symfony": "^2.7|^3.0",
+    "symfony-cmf/routing": "^1.1"
   },
-  "suggest": {
-    "gedmo/doctrine-behaviors": "Modules can implement a nested tree structure"
+  "require-dev": {
+    "doctrine/orm": "^2.4"
   },
   "autoload": {
     "psr-4": {
