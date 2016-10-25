@@ -11,16 +11,12 @@
 namespace Harmony\Component\ModularRouting\Tests\Provider;
 
 use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
-use Harmony\Component\ModularRouting\Provider\SimpleProvider;
+use Harmony\Component\ModularRouting\Provider\SegmentProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouteCollection;
 
-class SimpleProviderTest extends \PHPUnit_Framework_TestCase
+class SegmentProviderTest extends \PHPUnit_Framework_TestCase
 {
-    private $factory;
-
-    private $loader;
-
     private $manager;
 
     private $provider;
@@ -29,39 +25,39 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->manager = $this->getMock('Harmony\Component\ModularRouting\Manager\ModuleManagerInterface');
 
-        $this->provider = new SimpleProvider($this->manager);
+        $this->provider = new SegmentProvider($this->manager);
     }
 
-    public function testGetModuleByParametersWithId()
+    public function testLoadModuleByParametersWithId()
     {
         $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
 
         $this->manager->expects($this->once())
-            ->method('findModuleBy')->with(['id' => 1])
+            ->method('findModuleByIdentity')->with(1)
             ->will($this->returnValue($module));
 
-        $this->assertEquals($module, $this->provider->getModuleByParameters(['module' => 1]));
+        $this->assertEquals($module, $this->provider->loadModuleByParameters(['module' => 1]));
     }
 
-    public function testGetModuleByParametersWithModule()
+    public function testLoadModuleByParametersWithModule()
     {
         $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
 
-        $this->assertEquals($module, $this->provider->getModuleByParameters(['module' => $module]));
+        $this->assertEquals($module, $this->provider->loadModuleByParameters(['module' => $module]));
     }
 
     /**
      * @dataProvider getValidRequests
      */
-    public function testGetModuleByRequest($request, $parameters)
+    public function testLoadModuleByRequest($request, $parameters)
     {
         $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
 
         $this->manager->expects($this->once())
-            ->method('findModuleBy')->with(['id' => 1])
+            ->method('findModuleByIdentity')->with(1)
             ->will($this->returnValue($module));
 
-        $this->assertEquals($module, $this->provider->getModuleByRequest($request, $parameters));
+        $this->assertEquals($module, $this->provider->loadModuleByRequest($request, $parameters));
     }
 
     public function getValidRequests()
@@ -93,9 +89,9 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
      * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
      * @dataProvider getInvalidRequests
      */
-    public function testGetModuleByRequestThrowsExceptionOnInvalidPath($request, $parameters)
+    public function testLoadModuleByRequestThrowsExceptionOnInvalidPath($request, $parameters)
     {
-        $this->provider->getModuleByRequest($request, $parameters);
+        $this->provider->loadModuleByRequest($request, $parameters);
     }
 
     public function getInvalidRequests()
@@ -126,13 +122,13 @@ class SimpleProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
-    public function testGetModuleByRequestThrowsExceptionOnInvalidModule()
+    public function testLoadModuleByRequestThrowsExceptionOnInvalidModule()
     {
         $this->manager->expects($this->once())
-            ->method('findModuleBy')->with(['id' => 1])
+            ->method('findModuleByIdentity')->with(1)
             ->will($this->returnValue(null));
 
-        $this->provider->getModuleByRequest(new Request, [
+        $this->provider->loadModuleByRequest(new Request, [
             '_modular_path' => '1',
         ]);
     }

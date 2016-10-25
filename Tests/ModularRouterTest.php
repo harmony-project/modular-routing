@@ -26,7 +26,8 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = $this->getMockBuilder('Harmony\Component\ModularRouting\Metadata\MetadataFactory')
+        $this->factory = $this
+            ->getMockBuilder('Harmony\Component\ModularRouting\Metadata\MetadataFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->provider = $this->getMock('Harmony\Component\ModularRouting\Provider\ProviderInterface');
@@ -87,14 +88,14 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
     {
         $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
 
-        $this->provider->expects($this->once())
-            ->method('getModuleByParameters')
-            ->will($this->returnValue($module));
-
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
 
         $metadata = new ModuleMetadata('Foo', 'foo', $routes);
+
+        $this->provider->expects($this->once())
+            ->method('loadModuleByParameters')
+            ->will($this->returnValue($module));
 
         $this->factory->expects($this->once())
             ->method('hasMetadataFor')
@@ -114,14 +115,14 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
     {
         $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
 
-        $this->provider->expects($this->once())
-            ->method('getModularSegment')
-            ->will($this->returnValue('1'));
-
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
 
         $metadata = new ModuleMetadata('Foo', 'foo', $routes);
+
+        $module->expects($this->once())
+            ->method('getModularIdentity')
+            ->will($this->returnValue('1'));
 
         $this->factory->expects($this->once())
             ->method('hasMetadataFor')
@@ -141,14 +142,14 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
     {
         $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
 
-        $this->provider->expects($this->once())
-            ->method('getModuleByRequest')
-            ->will($this->returnValue($module));
-
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
 
         $metadata = new ModuleMetadata('Foo', 'foo', $routes);
+
+        $this->provider->expects($this->once())
+            ->method('loadModuleByRequest')
+            ->will($this->returnValue($module));
 
         $this->factory->expects($this->once())
             ->method('hasMetadataFor')
