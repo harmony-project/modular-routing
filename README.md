@@ -12,9 +12,6 @@ Features include:
 - Routing metadata configurable by YAML
 - Customizable mapping process
 
-Potential upcoming features:
-- Multiple module mappings in a single Router instance
-
 Installation
 ------------
 This component is available as a package in Composer:
