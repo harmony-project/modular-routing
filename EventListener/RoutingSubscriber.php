@@ -13,12 +13,14 @@ namespace Harmony\Component\ModularRouting\EventListener;
 use Exception;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
-use Harmony\Component\ModularRouting\Router;
+use Harmony\Component\ModularRouting\ModularRouter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
+ * RoutingSubscriber
+ *
  * Handle events regarding routing.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
@@ -26,31 +28,31 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class RoutingSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var Router
+     * @var ModularRouter
      */
     private $router;
 
     /**
      * @var ModuleManagerInterface
      */
-    private $moduleManager;
+    private $manager;
 
     /**
      * RoutingSubscriber constructor
      *
-     * @param Router                 $router
-     * @param ModuleManagerInterface $moduleManager
+     * @param ModularRouter          $router
+     * @param ModuleManagerInterface $manager
      */
-    public function __construct(Router $router, ModuleManagerInterface $moduleManager)
+    public function __construct(ModularRouter $router, ModuleManagerInterface $manager)
     {
-        $this->router        = $router;
-        $this->moduleManager = $moduleManager;
+        $this->router  = $router;
+        $this->manager = $manager;
     }
 
     /**
-     * @return Router
+     * @return ModularRouter
      */
-    public function getRouter()
+    public function getModularRouter()
     {
         return $this->router;
     }
@@ -60,7 +62,7 @@ class RoutingSubscriber implements EventSubscriberInterface
      */
     public function getModuleManager()
     {
-        return $this->moduleManager;
+        return $this->manager;
     }
 
     /**
@@ -74,7 +76,7 @@ class RoutingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Handle actions before the kernel loads the controller
+     * Handle actions before the kernel loads the controller.
      *
      * @param FilterControllerEvent $event
      */
@@ -86,7 +88,7 @@ class RoutingSubscriber implements EventSubscriberInterface
 
         if (!$module instanceof ModuleInterface) {
             try {
-                $module = $this->getRouter()->getModuleByRequest($event->getRequest());
+                $module = $this->getModularRouter()->getModuleByRequest($event->getRequest());
             }
             catch (Exception $e) {
                 return;
