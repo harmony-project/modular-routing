@@ -28,7 +28,7 @@ class EntitySubscriber implements EventSubscriber
     /**
      * @var ModuleManagerInterface
      */
-    private $moduleManager;
+    private $manager;
 
     /**
      * @var string
@@ -38,13 +38,13 @@ class EntitySubscriber implements EventSubscriber
     /**
      * EntitySubscriber constructor
      *
-     * @param ModuleManagerInterface $moduleManager
+     * @param ModuleManagerInterface $manager
      * @param string                 $moduleClass
      */
-    public function __construct(ModuleManagerInterface $moduleManager, $moduleClass)
+    public function __construct(ModuleManagerInterface $manager, $moduleClass)
     {
-        $this->moduleManager = $moduleManager;
-        $this->moduleClass   = $moduleClass;
+        $this->manager     = $manager;
+        $this->moduleClass = $moduleClass;
     }
 
     /**
@@ -52,7 +52,7 @@ class EntitySubscriber implements EventSubscriber
      */
     public function getModuleManager()
     {
-        return $this->moduleManager;
+        return $this->manager;
     }
 
     /**
