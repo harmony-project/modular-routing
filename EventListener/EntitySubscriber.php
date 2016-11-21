@@ -17,6 +17,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
+ * EntitySubscriber
+ *
  * Handle events regarding modular entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
