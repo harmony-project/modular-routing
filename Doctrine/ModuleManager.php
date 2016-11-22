@@ -8,17 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Manager;
+namespace Harmony\Component\ModularRouting\Doctrine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Harmony\Component\ModularRouting\Manager\ModuleManager as BaseManager;
+use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
  * DoctrineModuleManager
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
-class DoctrineModuleManager extends ModuleManager implements ModuleManagerInterface
+class ModuleManager extends BaseManager implements ModuleManagerInterface
 {
     /**
      * @var ObjectRepository
