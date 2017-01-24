@@ -14,10 +14,15 @@ use Harmony\Component\ModularRouting\Metadata\MetadataFactoryInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\Provider\ProviderInterface;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
+use Symfony\Component\Config\ConfigCacheFactoryInterface;
+use Symfony\Component\Config\ConfigCacheFactory;
+use Symfony\Component\Config\ConfigCacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\Dumper\GeneratorDumperInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\Dumper\MatcherDumperInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
@@ -43,9 +48,19 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     private $collections = [];
 
     /**
-     * @var RequestContext
+     * @var ConfigCacheFactoryInterface|null
+     */
+    private $configCacheFactory;
+
+    /**
+     * @var RequestContext|null
      */
     private $context;
+
+    /**
+     * @var array
+     */
+    private $generators = [];
 
     /**
      * @var UrlMatcher
@@ -53,19 +68,22 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     private $initialMatcher = null;
 
     /**
+     * @var array
+     */
+    private $matchers = [];
+
+    /**
      * @var MetadataFactoryInterface
      */
     private $metadataFactory;
 
     /**
-     * An array of options
-     *
      * @var array
      */
     private $options = [];
 
     /**
-     * An array containing the route prefix data
+     * Array containing the route prefix data
      *
      * @var array
      */
@@ -179,6 +197,30 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
+     * Sets the ConfigCache factory to use.
+     *
+     * @param ConfigCacheFactoryInterface $configCacheFactory The factory to use
+     */
+    public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
+    {
+        $this->configCacheFactory = $configCacheFactory;
+    }
+
+    /**
+     * Provides the ConfigCache factory implementation, falling back to a
+     * default implementation if necessary.
+     *
+     * @return ConfigCacheFactoryInterface $configCacheFactory
+     */
+    private function getConfigCacheFactory()
+    {
+        if (null === $this->configCacheFactory) {
+            $this->configCacheFactory = new ConfigCacheFactory($this->options['debug']);
+        }
+        return $this->configCacheFactory;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setContext(RequestContext $context)
@@ -261,14 +303,36 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getGeneratorForModule(ModuleInterface $module)
     {
-        $type = $module->getModularType();
-
+        $type       = $module->getModularType();
         $collection = $this->getRouteCollectionForType($type);
 
-        // todo caching
-        $generator = new $this->options['generator_class']($collection, $this->context);
+        if (array_key_exists($type, $this->generators)) {
+            return $this->generators[$type];
+        }
 
-        return $generator;
+        if (null === $this->options['cache_dir']) {
+            return $this->generators[$type] = new $this->options['generator_class']($collection, $this->context);
+        }
+
+        $cacheClass = sprintf('%s_UrlGenerator', $type);
+
+        $cache = $this->getConfigCacheFactory()->cache($this->options['cache_dir'] . '/' . $cacheClass .'.php',
+            function (ConfigCacheInterface $cache) use ($cacheClass, $collection) {
+                /** @var GeneratorDumperInterface $dumper */
+                $dumper = new $this->options['generator_dumper_class']($collection);
+
+                $options = array(
+                    'class'      => $cacheClass,
+                    'base_class' => $this->options['generator_base_class'],
+                );
+
+                $cache->write($dumper->dump($options), $collection->getResources());
+            }
+        );
+
+        require_once $cache->getPath();
+
+        return $this->generators[$type] = new $cacheClass($this->context);
     }
 
     /**
@@ -280,14 +344,36 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function getMatcherForModule(ModuleInterface $module)
     {
-        $type = $module->getModularType();
-
+        $type       = $module->getModularType();
         $collection = $this->getRouteCollectionForType($type);
 
-        // todo caching
-        $matcher = new $this->options['matcher_class']($collection, $this->context);
+        if (array_key_exists($type, $this->matchers)) {
+            return $this->matchers[$type];
+        }
 
-        return $matcher;
+        if (null === $this->options['cache_dir']) {
+            return $this->matchers[$type] = new $this->options['matcher_class']($collection, $this->context);
+        }
+
+        $cacheClass = sprintf('%s_UrlMatcher', $type);
+
+        $cache = $this->getConfigCacheFactory()->cache($this->options['cache_dir'] . '/' . $cacheClass .'.php',
+            function (ConfigCacheInterface $cache) use ($cacheClass, $collection) {
+                /** @var MatcherDumperInterface $dumper */
+                $dumper = new $this->options['matcher_dumper_class']($collection);
+
+                $options = array(
+                    'class'      => $cacheClass,
+                    'base_class' => $this->options['matcher_base_class'],
+                );
+
+                $cache->write($dumper->dump($options), $collection->getResources());
+            }
+        );
+
+        require_once $cache->getPath();
+
+        return $this->matchers[$type] = new $cacheClass($this->context);
     }
 
     /**

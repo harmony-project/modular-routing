@@ -8,7 +8,7 @@ Introduction
 This component allows you to use the Symfony route matching process against different sets of metadata depending on the request and other parameters.
 
 Features include:
-- Cache-enabled Router (Not implemented yet)
+- Cache-enabled Router
 - Routing metadata configurable by YAML
 - Customizable mapping process
 
