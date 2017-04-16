@@ -12,10 +12,11 @@ namespace Harmony\Component\ModularRouting\Tests\Provider;
 
 use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
 use Harmony\Component\ModularRouting\Provider\SegmentProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouteCollection;
 
-class SegmentProviderTest extends \PHPUnit_Framework_TestCase
+class SegmentProviderTest extends TestCase
 {
     private $manager;
 
@@ -23,14 +24,14 @@ class SegmentProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->manager = $this->getMock('Harmony\Component\ModularRouting\Manager\ModuleManagerInterface');
+        $this->manager = $this->createMock('Harmony\Component\ModularRouting\Manager\ModuleManagerInterface');
 
         $this->provider = new SegmentProvider($this->manager);
     }
 
     public function testLoadModuleByParametersWithId()
     {
-        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
 
         $this->manager->expects($this->once())
             ->method('findModuleByIdentity')->with(1)
@@ -41,7 +42,7 @@ class SegmentProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadModuleByParametersWithModule()
     {
-        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
 
         $this->assertEquals($module, $this->provider->loadModuleByParameters(['module' => $module]));
     }
@@ -51,7 +52,7 @@ class SegmentProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadModuleByRequest($request, $parameters)
     {
-        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
 
         $this->manager->expects($this->once())
             ->method('findModuleByIdentity')->with(1)

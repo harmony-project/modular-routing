@@ -11,13 +11,14 @@
 namespace Harmony\Component\ModularRouting\Tests\Metadata\Loader;
 
 use Harmony\Component\ModularRouting\Metadata\Loader\YamlFileLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 
-class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
+class YamlFileLoaderTest extends TestCase
 {
     public function testSupports()
     {
-        $loader = new YamlFileLoader($this->getMock('Symfony\Component\Config\FileLocator'));
+        $loader = new YamlFileLoader($this->createMock('Symfony\Component\Config\FileLocator'));
 
         $this->assertTrue($loader->supports('foo.yml'), '->supports() returns true if the resource is loadable');
         $this->assertTrue($loader->supports('foo.yaml'), '->supports() returns true if the resource is loadable');

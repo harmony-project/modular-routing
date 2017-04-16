@@ -11,9 +11,10 @@
 namespace Harmony\Component\ModularRouting\Tests\Metadata;
 
 use Harmony\Component\ModularRouting\Metadata\MetadataFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 
-class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
+class MetadataFactoryTest extends TestCase
 {
     private $factory;
 
@@ -23,8 +24,8 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataLoader = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
-        $this->routingLoader  = $this->getMock('Symfony\Component\Config\Loader\LoaderInterface');
+        $this->metadataLoader = $this->createMock('Symfony\Component\Config\Loader\LoaderInterface');
+        $this->routingLoader  = $this->createMock('Symfony\Component\Config\Loader\LoaderInterface');
         $this->factory        = new MetadataFactory($this->metadataLoader, $this->routingLoader, 'routing.yml', 'ResourceType');
     }
 

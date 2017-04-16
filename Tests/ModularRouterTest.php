@@ -12,11 +12,12 @@ namespace Harmony\Component\ModularRouting\Tests;
 
 use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
 use Harmony\Component\ModularRouting\ModularRouter;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class ModularRouterTest extends \PHPUnit_Framework_TestCase
+class ModularRouterTest extends TestCase
 {
     private $factory;
     
@@ -30,7 +31,7 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Harmony\Component\ModularRouting\Metadata\MetadataFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->provider = $this->getMock('Harmony\Component\ModularRouting\Provider\ProviderInterface');
+        $this->provider = $this->createMock('Harmony\Component\ModularRouting\Provider\ProviderInterface');
 
         $this->router = new ModularRouter($this->provider, $this->factory);
     }
@@ -86,7 +87,7 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateWithId()
     {
-        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -113,7 +114,7 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateWithModule()
     {
-        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -140,7 +141,7 @@ class ModularRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchRequest()
     {
-        $module = $this->getMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
