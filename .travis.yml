@@ -14,7 +14,8 @@ env:
 before_script:
   - composer require symfony/symfony:${SYMFONY_VERSION}
 
-script: phpunit
+script:
+  - ./vendor/bin/phpunit --coverage-text
 
 matrix:
   allow_failures:
