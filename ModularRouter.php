@@ -20,6 +20,7 @@ use Symfony\Component\Config\ConfigCacheInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\Dumper\GeneratorDumperInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\Dumper\MatcherDumperInterface;
@@ -426,13 +427,18 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      */
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
-        if ($parameters['module'] instanceof ModuleInterface) {
+        if (isset($parameters['module']) && $parameters['module'] instanceof ModuleInterface) {
             $module = $parameters['module'];
-            
+
             $parameters['module'] = $module->getModularIdentity();
         }
         else {
-            $module = $this->provider->loadModuleByParameters($parameters); // todo add exceptions to method doc block
+            try {
+                $module = $this->provider->loadModuleByParameters($parameters);
+            }
+            catch (\Exception $e) {
+                throw new RouteNotFoundException($e->getMessage());
+            }
         }
 
         $generator = $this->getGeneratorForModule($module);

@@ -139,6 +139,26 @@ class ModularRouterTest extends TestCase
         $this->assertEquals('/module/1', $this->router->generate('bar', ['module' => $module]));
     }
 
+    /**
+     * @expectedException \Symfony\Component\Routing\Exception\RouteNotFoundException
+     * @expectedExceptionMessage Invalid routing message
+     */
+    public function testGenerateWithInvalidParameters()
+    {
+        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+
+        $routes = new RouteCollection;
+        $routes->add('bar', new Route('/module/{module}'));
+
+        $metadata = new ModuleMetadata('Foo', 'foo', $routes);
+
+        $this->provider->expects($this->once())
+            ->method('loadModuleByParameters')
+            ->will($this->throwException(new \Exception('Invalid routing message')));
+
+        $this->router->generate('bar');
+    }
+
     public function testMatchRequest()
     {
         $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
