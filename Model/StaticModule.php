@@ -11,8 +11,6 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * StaticModule
- *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class StaticModule extends Module

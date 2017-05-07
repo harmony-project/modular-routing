@@ -38,10 +38,10 @@ class ModularRouterTest extends TestCase
 
     public function testSetOptionsWithSupportedOptions()
     {
-        $this->router->setOptions(array(
+        $this->router->setOptions([
             'cache_dir' => './cache',
             'debug' => true,
-        ));
+        ]);
 
         $this->assertSame('./cache', $this->router->getOption('cache_dir'));
         $this->assertTrue($this->router->getOption('debug'));
@@ -53,11 +53,11 @@ class ModularRouterTest extends TestCase
      */
     public function testSetOptionsWithUnsupportedOptions()
     {
-        $this->router->setOptions(array(
+        $this->router->setOptions([
             'cache_dir' => './cache',
             'option_foo' => true,
             'option_bar' => 'baz',
-        ));
+        ]);
     }
 
     public function testSetOptionWithSupportedOption()

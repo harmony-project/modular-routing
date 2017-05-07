@@ -33,7 +33,7 @@ class XmlFileLoaderTest extends TestCase
      */
     public function testLoadThrowsExceptionWithInvalidFile($filePath)
     {
-        $loader = new XmlFileLoader(new FileLocator(array(__DIR__ . '/../../Fixtures')));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../../Fixtures']));
         $loader->load($filePath);
     }
 

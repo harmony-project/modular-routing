@@ -11,8 +11,6 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * ModularTrait
- *
  * To be embedded in entities that are mapped to a module.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
@@ -26,6 +24,8 @@ trait ModularTrait
 
     /**
      * @param ModuleInterface|null $module
+     *
+     * @return self
      */
     public function setModule(ModuleInterface $module = null)
     {
@@ -35,7 +35,7 @@ trait ModularTrait
     }
 
     /**
-     * @return mixed
+     * @return ModuleInterface
      */
     public function getModule()
     {

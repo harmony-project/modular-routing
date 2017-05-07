@@ -31,7 +31,7 @@ class YamlFileLoaderTest extends TestCase
 
     public function testLoadDoesNothingIfEmpty()
     {
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator([__DIR__ . '/../../Fixtures']));
 
         $this->assertEquals([], $loader->load('empty.yml'));
     }
@@ -42,7 +42,7 @@ class YamlFileLoaderTest extends TestCase
      */
     public function testLoadThrowsExceptionWithInvalidFile($filePath)
     {
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator([__DIR__ . '/../../Fixtures']));
         $loader->load($filePath);
     }
 
@@ -70,7 +70,7 @@ class YamlFileLoaderTest extends TestCase
             ]
         ];
 
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator([__DIR__ . '/../../Fixtures']));
 
         $this->assertEquals($collection, $loader->load('valid.yml'));
     }
@@ -90,7 +90,7 @@ class YamlFileLoaderTest extends TestCase
             ]
         ];
 
-        $loader = new YamlFileLoader(new FileLocator(array(__DIR__.'/../../Fixtures')));
+        $loader = new YamlFileLoader(new FileLocator([__DIR__ . '/../../Fixtures']));
 
         $this->assertEquals($collection, $loader->load('import.yml'));
     }

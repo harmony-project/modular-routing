@@ -14,15 +14,12 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**
- * XmlFileLoader
- *
- * Loads modular routing metadata files formatted in YAML.
+ * Loads modular routing metadata files formatted in XML.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class XmlFileLoader extends FileLoader
 {
-
     /**
      * Loads an XML file.
      *
@@ -88,7 +85,7 @@ class XmlFileLoader extends FileLoader
      */
     protected function parseConfigs(\DOMElement $node, $path)
     {
-        $resources = array();
+        $resources = [];
 
         /** @var \DOMElement $n */
         foreach ($node->getElementsByTagName('*') as $n) {
@@ -146,7 +143,7 @@ class XmlFileLoader extends FileLoader
     protected function parseMetadata(array &$collection, \DOMElement $node, $path)
     {
         if ('' === ($id = $node->getAttribute('id')) || !$node->hasAttribute('type')) {
-            throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" must have an "id" and a "type" attribute.', $path));
+            throw new \InvalidArgumentException(sprintf('The &lt;route&gt; element in file "%s" must have an "id" and a "type" attribute.', $path));
         }
 
         $metadata = [
@@ -171,7 +168,7 @@ class XmlFileLoader extends FileLoader
     protected function parseImport(array &$collection, \DOMElement $node, $path, $file)
     {
         if ('' === $resource = $node->getAttribute('resource')) {
-            throw new \InvalidArgumentException(sprintf('The <import> element in file "%s" must have a "resource" attribute.', $path));
+            throw new \InvalidArgumentException(sprintf('The &lt;import&gt; element in file "%s" must have a "resource" attribute.', $path));
         }
 
         $type = $node->getAttribute('type');

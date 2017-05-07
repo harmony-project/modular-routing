@@ -1,5 +1,5 @@
 module_foo:
-    name: "Foo Module"
-    type: "foo_module"
-    routing:
-        - { resource: "FooComponent/Controller/", type: "annotation" }
+  name: "Foo Module"
+  type: "foo_module"
+  routing:
+    - { resource: "FooComponent/Controller/", type: "annotation" }

@@ -15,8 +15,6 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
 
 /**
- * YamlFileLoader
- *
  * Loads modular routing metadata files formatted in YAML.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
@@ -41,7 +39,7 @@ class YamlFileLoader extends FileLoader
      * @param string      $file The file path
      * @param string|null $type The resource type
      *
-     * @return array A collection of metadata
+     * @return array                     A collection of metadata
      * @throws \InvalidArgumentException When metadata can't be parsed because YAML is invalid.
      */
     public function load($file, $type = null)

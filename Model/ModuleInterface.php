@@ -11,28 +11,26 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * ModuleInterface
- *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 interface ModuleInterface
 {
     /**
-     * Returns a value to identify the module
+     * Returns a value to identify the module.
      *
      * @return string
      */
     public function getModularIdentity();
 
     /**
-     * Sets the type of the module
+     * Sets the type of the module.
      *
      * @param string $type
      */
     public function setModularType($type);
 
     /**
-     * Returns the type of the module
+     * Returns the type of the module.
      *
      * @return string
      */

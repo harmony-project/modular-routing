@@ -11,9 +11,9 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * ModularRepositoryTrait
- *
  * Adds useful repository methods for modular entities.
+ *
+ * @author Tim Goudriaan <tim@harmony-project.io>
  */
 trait ModularRepositoryTrait
 {

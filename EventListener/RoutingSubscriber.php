@@ -10,7 +10,6 @@
 
 namespace Harmony\Component\ModularRouting\EventListener;
 
-use Exception;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\ModularRouter;
@@ -19,8 +18,6 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * RoutingSubscriber
- *
  * Handle events regarding routing.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
@@ -38,8 +35,6 @@ class RoutingSubscriber implements EventSubscriberInterface
     private $manager;
 
     /**
-     * RoutingSubscriber constructor
-     *
      * @param ModularRouter          $router
      * @param ModuleManagerInterface $manager
      */
@@ -70,9 +65,9 @@ class RoutingSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::CONTROLLER => 'onKernelController',
-        );
+        ];
     }
 
     /**
@@ -90,7 +85,7 @@ class RoutingSubscriber implements EventSubscriberInterface
             try {
                 $module = $this->getModularRouter()->getModuleByRequest($event->getRequest());
             }
-            catch (Exception $e) {
+            catch (\Exception $e) {
                 return;
             }
         }

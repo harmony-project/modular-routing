@@ -13,37 +13,35 @@ namespace Harmony\Component\ModularRouting\Manager;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 
 /**
- * ModuleManagerInterface
- *
- * Interacts with Module entities
+ * Interacts with Module entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 interface ModuleManagerInterface
 {
     /**
-     * Sets a reference to the current module
+     * Sets a reference to the current module.
      * 
      * @param ModuleInterface|null $module
      */
     public function setCurrentModule(ModuleInterface $module = null);
 
     /**
-     * Returns a reference to the current module
+     * Returns a reference to the current module.
      * 
      * @return ModuleInterface|null
      */
     public function getCurrentModule();
 
     /**
-     * Sets the value to use to identify a module
+     * Sets the value to use to identify a module.
      *
      * @param string $identifier
      */
     public function setModularIdentifier($identifier);
 
     /**
-     * Returns the value to use to identify a module
+     * Returns the value to use to identify a module.
      *
      * @return string|null
      */

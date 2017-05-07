@@ -1,6 +1,6 @@
 test_module:
-    name: "Test Module"
-    type: "test_module"
-    invalid: false
-    routing:
-        - { resource: "TestComponent/Controller/", type: "annotation" }
+  name: "Test Module"
+  type: "test_module"
+  invalid: false
+  routing:
+    - { resource: "TestComponent/Controller/", type: "annotation" }

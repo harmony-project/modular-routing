@@ -11,8 +11,6 @@
 namespace Harmony\Component\ModularRouting\Metadata;
 
 /**
- * MetadataFactoryInterface
- *
  * Returns {@link ModuleMetadataInterface} instances for values.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>

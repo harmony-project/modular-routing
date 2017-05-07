@@ -14,29 +14,25 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * MetadataFactory
- *
  * Returns {@link ModuleMetadataInterface} instances by module type.
- *
- * todo caching
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class MetadataFactory implements MetadataFactoryInterface
 {
     /**
-     * Collection of metadata instances
+     * Collection of metadata instances.
      *
      * @var array
      */
     private $collection = [];
 
     /**
-     * Collection of definitions
+     * Collection of definitions.
      *
      * @var array|bool Is false before loading definitions
      */
-    private $definitions = false;
+    private $definitions;
 
     /**
      * @var LoaderInterface
@@ -72,6 +68,8 @@ class MetadataFactory implements MetadataFactoryInterface
         $this->routingLoader  = $routingLoader;
         $this->resource       = $resource;
         $this->resourceType   = $resourceType;
+
+        $this->definitions = false;
     }
 
     /**

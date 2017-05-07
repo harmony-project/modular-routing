@@ -13,9 +13,7 @@ namespace Harmony\Component\ModularRouting\Metadata;
 use Exception;
 
 /**
- * NoSuchMetadataException
- *
- * Exception thrown when metadata cannot be found.
+ * Exception thrown when metadata for a module can't be found.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */

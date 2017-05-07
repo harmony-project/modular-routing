@@ -10,13 +10,14 @@
 
 namespace Harmony\Component\ModularRouting\Doctrine;
 
+use Doctrine\ORM\EntityRepository;
 use Harmony\Component\ModularRouting\Model\ModularRepositoryTrait as BaseRepositoryTrait;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 
 /**
- * ModularRepositoryTrait
- *
  * Adds useful Doctrine-based repository methods for modular entities.
+ *
+ * @author Tim Goudriaan <tim@harmony-project.io>
  */
 trait ModularRepositoryTrait
 {
@@ -31,6 +32,7 @@ trait ModularRepositoryTrait
      */
     public function findByModule(ModuleInterface $module = null)
     {
+        /** @var EntityRepository $this */
         $qb = $this->createQueryBuilder('e');
 
         $qb->select('e');

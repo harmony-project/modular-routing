@@ -9,7 +9,7 @@ This component allows you to use the Symfony route matching process against diff
 
 Features include:
 - Cache-enabled Router
-- Routing metadata configurable by YAML
+- Routing metadata configurable by YAML and XML
 - Customizable mapping process
 
 Installation
@@ -20,4 +20,4 @@ This component is available as a package in Composer:
 
 Documentation
 -------------
-Learn more about this component in the Harmony documentation.
+Learn more about this component in the [Harmony documentation](http://harmony-project.io).

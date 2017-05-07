@@ -17,8 +17,6 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * SegmentProvider
- *
  * Returns Module instances based on a segment of the request path.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
@@ -31,8 +29,6 @@ class SegmentProvider implements ProviderInterface
     private $manager;
 
     /**
-     * SegmentProvider constructor
-     *
      * @param ModuleManagerInterface $manager
      */
     public function __construct(ModuleManagerInterface $manager)
@@ -107,7 +103,7 @@ class SegmentProvider implements ProviderInterface
     }
 
     /**
-     * Filters the Module identity from the request path
+     * Filters the Module identity from the request path.
      *
      * @param Request $request    The request to match
      * @param array   $parameters Parameters returned by an UrlMatcher

@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
- * ModularSubscriber
- *
  * Handle events regarding modular entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
@@ -36,8 +34,6 @@ class ModularSubscriber implements EventSubscriber
     protected $moduleClass;
 
     /**
-     * EntitySubscriber constructor
-     *
      * @param ModuleManagerInterface $manager
      * @param string                 $moduleClass
      */
@@ -68,14 +64,14 @@ class ModularSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'loadClassMetadata',
             'prePersist',
-        );
+        ];
     }
 
     /**
-     * Handles actions when metadata is loaded
+     * Handles actions when metadata is loaded.
      *
      * Creates an association for entities that inherit ModularTrait.
      *
@@ -109,7 +105,7 @@ class ModularSubscriber implements EventSubscriber
     }
 
     /**
-     * Handles actions before creation of an entity
+     * Handles actions before creation of an entity.
      *
      * Sets the module of an entity to the current module defined
      * by the module manager if it has been left empty.
@@ -133,7 +129,7 @@ class ModularSubscriber implements EventSubscriber
     }
 
     /**
-     * Checks whether the entity inherits ModularTrait
+     * Checks whether the entity inherits ModularTrait.
      *
      * @param ClassMetadata $classMetadata Metadata of the class
      *

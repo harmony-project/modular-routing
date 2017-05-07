@@ -16,8 +16,6 @@ use Harmony\Component\ModularRouting\Manager\ModuleManager as BaseManager;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
- * DoctrineModuleManager
- *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class ModuleManager extends BaseManager implements ModuleManagerInterface
@@ -28,8 +26,6 @@ class ModuleManager extends BaseManager implements ModuleManagerInterface
     private $repository;
 
     /**
-     * DoctrineModuleManager constructor
-     *
      * @param ObjectManager $objectManager Doctrine object manager
      * @param string        $class         Class name of the entity
      */
@@ -39,7 +35,7 @@ class ModuleManager extends BaseManager implements ModuleManagerInterface
     }
 
     /**
-     * Returns the Module repository
+     * Returns the Module repository.
      *
      * @return ObjectRepository
      */
@@ -59,14 +55,14 @@ class ModuleManager extends BaseManager implements ModuleManagerInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException if the identifier is not set
+     * @throws \InvalidArgumentException When the identifier is invalid
      */
     public function findModuleByIdentity($identity)
     {
         $field = $this->getModularIdentifier();
 
         if (null == $field) {
-            throw new \RuntimeException('The module manager is missing a modular identifier.');
+            throw new \InvalidArgumentException('The module manager is missing a modular identifier.');
         }
 
         return $this->repository->findOneBy([$field => $identity]);

@@ -33,11 +33,9 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * ModularRouter
- *
  * This router uses custom Provider objects to retrieve RouteCollection instances.
  *
- * Inspired by Symfony Router and Symfony CMF DynamicRouter
+ * Inspired by Symfony Router and Symfony CMF DynamicRouter.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -84,22 +82,16 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     private $options = [];
 
     /**
-     * Array containing the route prefix data
-     *
      * @var array
      */
     private $routePrefix = [];
 
     /**
-     * Provider object for retrieving route collections
-     *
      * @var ProviderInterface
      */
     private $provider;
 
     /**
-     * Router constructor
-     *
      * @param ProviderInterface        $provider
      * @param MetadataFactoryInterface $metadataFactory
      * @param array                    $options
@@ -135,7 +127,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Sets options
+     * Sets options.
      *
      * Available options:
      *
@@ -144,7 +136,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      *
      * @param array $options An array of options
      *
-     * @throws \InvalidArgumentException When unsupported option is provided
+     * @throws \InvalidArgumentException When a unsupported option is provided
      */
     public function setOptions(array $options)
     {
@@ -164,12 +156,12 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Sets an option
+     * Sets an option.
      *
      * @param string $key   The key
      * @param mixed  $value The value
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException When a unsupported option is provided
      */
     public function setOption($key, $value)
     {
@@ -181,12 +173,12 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Gets an option value
+     * Gets an option value.
      *
      * @param string $key The key
      *
      * @return mixed The value
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException When a unsupported option is provided
      */
     public function getOption($key)
     {
@@ -218,6 +210,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         if (null === $this->configCacheFactory) {
             $this->configCacheFactory = new ConfigCacheFactory($this->options['debug']);
         }
+
         return $this->configCacheFactory;
     }
 
@@ -247,7 +240,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Returns the route collection for a module type
+     * Returns the route collection for a module type.
      *
      * @param string $type
      *
@@ -296,7 +289,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Returns a generator for a Module
+     * Returns a generator for a Module.
      *
      * @param ModuleInterface $module
      *
@@ -322,10 +315,10 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
                 /** @var GeneratorDumperInterface $dumper */
                 $dumper = new $this->options['generator_dumper_class']($collection);
 
-                $options = array(
+                $options = [
                     'class'      => $cacheClass,
                     'base_class' => $this->options['generator_base_class'],
-                );
+                ];
 
                 $cache->write($dumper->dump($options), $collection->getResources());
             }
@@ -337,7 +330,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Returns a matcher for a Module
+     * Returns a matcher for a Module.
      *
      * @param ModuleInterface $module
      *
@@ -363,10 +356,10 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
                 /** @var MatcherDumperInterface $dumper */
                 $dumper = new $this->options['matcher_dumper_class']($collection);
 
-                $options = array(
+                $options = [
                     'class'      => $cacheClass,
                     'base_class' => $this->options['matcher_base_class'],
-                );
+                ];
 
                 $cache->write($dumper->dump($options), $collection->getResources());
             }
@@ -378,7 +371,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Returns a module by matching the request
+     * Returns a module by matching the request.
      *
      * @param Request $request The request to match
      *
@@ -397,7 +390,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Returns a matcher that matches a Request to the route prefix
+     * Returns a matcher that matches a Request to the route prefix.
      *
      * @return UrlMatcher
      */
