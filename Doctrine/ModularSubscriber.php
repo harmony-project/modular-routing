@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\EventListener;
+namespace Harmony\Component\ModularRouting\Doctrine;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -17,13 +17,13 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
- * EntitySubscriber
+ * ModularSubscriber
  *
  * Handle events regarding modular entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
-class EntitySubscriber implements EventSubscriber
+class ModularSubscriber implements EventSubscriber
 {
     /**
      * @var ModuleManagerInterface
@@ -83,6 +83,7 @@ class EntitySubscriber implements EventSubscriber
      */
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
     {
+        /** @var ClassMetadata $classMetadata */
         $classMetadata = $eventArgs->getClassMetadata();
 
         if (null === $classMetadata->getReflectionClass() || false == $this->isModular($classMetadata)) {
