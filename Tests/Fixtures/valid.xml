@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<modules>
+  <module id="module_foo" name="Foo Module" type="foo_module">
+    <resource type="annotation">FooComponent/Controller/</resource>
+  </module>
+</modules>
