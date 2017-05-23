@@ -14,7 +14,7 @@ use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\ModularRouter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -66,16 +66,16 @@ class RoutingSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::CONTROLLER => 'onKernelController',
+            KernelEvents::REQUEST => [['onKernelRequest', 16]],
         ];
     }
 
     /**
-     * Handle actions before the kernel loads the controller.
+     * Handle actions before the kernel matches the controller.
      *
-     * @param FilterControllerEvent $event
+     * @param GetResponseEvent $event
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelRequest(GetResponseEvent $event)
     {
         if (null === $module = $event->getRequest()->get('module')) {
             return;
