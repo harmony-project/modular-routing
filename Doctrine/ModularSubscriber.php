@@ -82,26 +82,24 @@ class ModularSubscriber implements EventSubscriber
         /** @var ClassMetadata $classMetadata */
         $classMetadata = $eventArgs->getClassMetadata();
 
-        if (null === $classMetadata->getReflectionClass() || false == $this->isModular($classMetadata)) {
+        if (null === $classMetadata->getReflectionClass() ||
+            false == $this->isModular($classMetadata) ||
+            'Harmony\Component\ModularRouting\Model\StaticModule' == $this->getModuleClass() ||
+            $classMetadata->hasField('module') || $classMetadata->hasAssociation('module')) {
+
             return;
         }
 
-        if ('Harmony\Component\ModularRouting\Model\StaticModule' == $this->getModuleClass()) {
-            return;
-        }
-
-        if (!$classMetadata->hasField('module')) {
-            $classMetadata->mapManyToOne([
-                'targetEntity' => $this->getModuleClass(),
-                'fieldName'    => 'module',
-                'joinColumns'  => [
-                    [
-                        'name'                 => 'module_id',
-                        'referencedColumnName' => 'id',
-                    ],
+        $classMetadata->mapManyToOne([
+            'targetEntity' => $this->getModuleClass(),
+            'fieldName'    => 'module',
+            'joinColumns'  => [
+                [
+                    'name'                 => 'module_id',
+                    'referencedColumnName' => 'id',
                 ],
-            ]);
-        }
+            ],
+        ]);
     }
 
     /**
