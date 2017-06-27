@@ -26,6 +26,14 @@ class StaticModuleManager extends ModuleManager implements ModuleManagerInterfac
     /**
      * {@inheritdoc}
      */
+    public function getModularIdentifier()
+    {
+        return parent::getModularIdentifier() ?: 'modularType';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findModuleBy(array $criteria)
     {
         $identifier = $this->getModularIdentifier();

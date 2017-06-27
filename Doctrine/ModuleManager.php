@@ -47,6 +47,14 @@ class ModuleManager extends BaseManager implements ModuleManagerInterface
     /**
      * {@inheritdoc}
      */
+    public function getModularIdentifier()
+    {
+        return parent::getModularIdentifier() ?: 'id';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findModuleBy(array $criteria)
     {
         return $this->repository->findOneBy($criteria);
