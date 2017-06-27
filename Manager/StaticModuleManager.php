@@ -26,9 +26,17 @@ class StaticModuleManager extends ModuleManager implements ModuleManagerInterfac
     /**
      * {@inheritdoc}
      */
+    public function setModularIdentifier($identifier)
+    {
+        throw new \BadMethodCallException(sprintf('The modular identifier of %s can\'t be changed.', static::class));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getModularIdentifier()
     {
-        return parent::getModularIdentifier() ?: 'modularType';
+        return 'modularType';
     }
 
     /**
