@@ -11,6 +11,8 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
+ * Interface implemented by modules.
+ *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 interface ModuleInterface
@@ -18,7 +20,7 @@ interface ModuleInterface
     /**
      * Returns a value to identify the module.
      *
-     * @return string
+     * @return mixed
      */
     public function getModularIdentity();
 

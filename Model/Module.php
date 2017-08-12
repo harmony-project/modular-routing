@@ -11,6 +11,8 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
+ * Basic extendable implementation of ModuleInterface.
+ *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 abstract class Module implements ModuleInterface
@@ -26,7 +28,7 @@ abstract class Module implements ModuleInterface
     protected $modularType;
 
     /**
-     * Get id
+     * Returns the id of the module.
      *
      * @return integer
      */
