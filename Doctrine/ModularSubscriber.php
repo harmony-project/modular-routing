@@ -137,7 +137,7 @@ class ModularSubscriber implements EventSubscriber
     {
         $class = $classMetadata->getReflectionClass();
 
-        if (in_array('Harmony\Component\ModularRouting\Model\ModularTrait', $class->getTraitNames())) {
+        if (in_array('Harmony\Component\ModularRouting\Model\ModularInterface', $class->getInterfaceNames())) {
             return true;
         }
 

@@ -27,28 +27,19 @@ trait ModularRepositoryTrait
      * Find entities by a Module instance.
      *
      * @param ModuleInterface|null $module
+     * @param array|null           $orderBy
+     * @param int|null             $limit
+     * @param int|null             $offset
      *
      * @return mixed
      */
-    public function findByModule(ModuleInterface $module = null)
+    public function findByModule(ModuleInterface $module = null, array $orderBy = null, $limit = null, $offset = null)
     {
         /** @var EntityRepository $this */
-        $qb = $this->createQueryBuilder('e');
-
-        $qb->select('e');
-
         if ($this->isModular($module)) {
-            $qb
-                ->where($qb->expr()->eq('e.module', ':module'))
-                ->setParameter('module', $module)
-            ;
+            return $this->findBy(['module' => $module], $orderBy, $limit, $offset);
         }
 
-        $result = $qb
-            ->getQuery()
-            ->getResult()
-        ;
-
-        return $result;
+        return $this->findBy([], $orderBy, $limit, $offset);
     }
 }
