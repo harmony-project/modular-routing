@@ -11,7 +11,7 @@
 namespace Harmony\Component\ModularRouting\Metadata;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Routing\RouteCollection;
+use Harmony\Component\ModularRouting\RouteCollection;
 
 /**
  * Returns {@link ModuleMetadataInterface} instances by module type.

@@ -11,8 +11,10 @@
 namespace Harmony\Component\ModularRouting\Tests\Metadata;
 
 use Harmony\Component\ModularRouting\Metadata\MetadataFactory;
+use Harmony\Component\ModularRouting\Metadata\NoSuchMetadataException;
+use Harmony\Component\ModularRouting\RouteCollection;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Config\Loader\LoaderInterface;
 
 class MetadataFactoryTest extends TestCase
 {
@@ -24,8 +26,8 @@ class MetadataFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $this->metadataLoader = $this->createMock('Symfony\Component\Config\Loader\LoaderInterface');
-        $this->routingLoader  = $this->createMock('Symfony\Component\Config\Loader\LoaderInterface');
+        $this->metadataLoader = $this->createMock(LoaderInterface::class);
+        $this->routingLoader  = $this->createMock(LoaderInterface::class);
         $this->factory        = new MetadataFactory($this->metadataLoader, $this->routingLoader, 'routing.yml', 'ResourceType');
     }
 
@@ -50,7 +52,7 @@ class MetadataFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException Harmony\Component\ModularRouting\Metadata\NoSuchMetadataException
+     * @expectedException NoSuchMetadataException
      */
     public function testUnconfiguredMetadata()
     {
