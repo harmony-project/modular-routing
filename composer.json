@@ -1,10 +1,14 @@
 {
   "name": "harmony-project/modular-routing",
   "type": "library",
-  "description": "An implementation of the Symfony router with modular configuration options",
-  "keywords": ["routing", "database"],
+  "description": "An implementation of the Symfony router using a customizable matching process",
+  "keywords": ["routing", "modular", "database"],
   "homepage": "http://harmony-project.io",
   "license": "MIT",
+  "support": {
+    "docs": "http://harmony-project.io/docs/modular-routing",
+    "issues": "https://github.com/harmony-project/modular-routing/issues"
+  },
   "authors": [
     {
       "name": "Tim Goudriaan",
