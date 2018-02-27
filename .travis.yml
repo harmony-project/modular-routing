@@ -11,7 +11,7 @@ env:
 
 before_install:
   - composer require "symfony/config:${SYMFONY_VERSION}" --no-update
-  - composer require "symfony/database:${SYMFONY_VERSION}" --no-update
+  - composer require "symfony/http-foundation:${SYMFONY_VERSION}" --no-update
   - composer require "symfony/routing:${SYMFONY_VERSION}" --no-update
   - composer require "symfony/yaml:${SYMFONY_VERSION}" --no-update
   - composer require "symfony-cmf/routing:${CMF_VERSION}" --no-update
