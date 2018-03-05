@@ -13,6 +13,8 @@ namespace Harmony\Component\ModularRouting\Metadata;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
+ * Basic implementation of {@link ModuleMetadataInterface}.
+ *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class ModuleMetadata

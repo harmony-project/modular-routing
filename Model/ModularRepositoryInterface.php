@@ -10,6 +10,11 @@
 
 namespace Harmony\Component\ModularRouting\Model;
 
+/**
+ * Interface for (entity) repositories of objects implementing {@link ModularInterface}.
+ *
+ * @author Tim Goudriaan <tim@harmony-project.io>
+ */
 interface ModularRepositoryInterface
 {
 }

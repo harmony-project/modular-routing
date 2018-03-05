@@ -13,7 +13,7 @@ namespace Harmony\Component\ModularRouting\Manager;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 
 /**
- * Interacts with Module entities.
+ * Interface for module managers.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */

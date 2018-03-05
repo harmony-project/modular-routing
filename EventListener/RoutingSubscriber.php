@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Handle events regarding routing.
+ * Handles events regarding modular routing.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */

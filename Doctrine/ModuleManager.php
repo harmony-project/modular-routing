@@ -16,6 +16,8 @@ use Harmony\Component\ModularRouting\Manager\ModuleManager as BaseManager;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
+ * A Doctrine implementation of {@link ModuleManagerInterface}.
+ *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 class ModuleManager extends BaseManager implements ModuleManagerInterface
@@ -35,8 +37,6 @@ class ModuleManager extends BaseManager implements ModuleManagerInterface
     }
 
     /**
-     * Returns the Module repository.
-     *
      * @return ObjectRepository
      */
     public function getRepository()

@@ -18,26 +18,24 @@ namespace Harmony\Component\ModularRouting\Model;
 trait ModularRepositoryTrait
 {
     /**
-     * Checks if a Module instance is valid.
+     * Checks if a {@link ModuleInterface} instance is valid.
      *
-     * By implementing this method, repositories can simply check if the Module instance is invalid
-     * to determine that it doesn't have an association with the given Module. Enabling the use of
-     * the entity with StaticModule instances or without implementing the ModularRouting component.
+     * By implementing this method, repositories can simply check if the module
+     * is invalid to determine that there's no active association between this
+     * entity and modules. Check this to change behavior within the repository
+     * for projects with {@link StaticModule} modules or haven't implemented
+     * modular routing.
      *
      * @param ModuleInterface|null $module
      *
-     * @return bool Returns false if the instance is invalid or not modular
+     * @return boolean Returns false if the instance is invalid or not modular
      */
     protected function isModular(ModuleInterface $module = null)
     {
-        if (null == $module) {
-            return false;
+        if ($module instanceof ModuleInterface && !$module instanceof StaticModule) {
+            return true;
         }
 
-        if ($module instanceof StaticModule) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }

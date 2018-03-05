@@ -10,9 +10,16 @@
 
 namespace Harmony\Component\ModularRouting\Model;
 
+/**
+ * Interface for objects that are mapped to a module.
+ *
+ * @author Tim Goudriaan <tim@harmony-project.io>
+ */
 interface ModularInterface
 {
     /**
+     * Sets the associated module.
+     *
      * @param ModuleInterface|null $module
      *
      * @return self
@@ -20,6 +27,8 @@ interface ModularInterface
     public function setModule(ModuleInterface $module = null);
 
     /**
+     * Returns the associated module.
+     *
      * @return ModuleInterface
      */
     public function getModule();

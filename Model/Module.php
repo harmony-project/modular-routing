@@ -11,14 +11,14 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * Basic extendable implementation of ModuleInterface.
+ * Basic extendable implementation of {@link ModuleInterface}.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
 abstract class Module implements ModuleInterface
 {
     /**
-     * @var int
+     * @var integer
      */
     protected $id;
 

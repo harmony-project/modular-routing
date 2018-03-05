@@ -13,11 +13,13 @@ namespace Harmony\Component\ModularRouting;
 use Harmony\Component\ModularRouting\Metadata\MetadataFactoryInterface;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\Provider\ProviderInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Component\Config\ConfigCacheFactoryInterface;
 use Symfony\Component\Config\ConfigCacheFactory;
 use Symfony\Component\Config\ConfigCacheInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing as SymfonyRouting;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -67,6 +69,11 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     private $initialMatcher = null;
 
     /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * @var array
      */
     private $matchers = [];
@@ -82,40 +89,33 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     private $options = [];
 
     /**
-     * @var array
-     */
-    private $routePrefix = [];
-
-    /**
      * @var ProviderInterface
      */
     private $provider;
+
+    /**
+     * @var array
+     */
+    private $routePrefix = [];
 
     /**
      * @param ProviderInterface        $provider
      * @param MetadataFactoryInterface $metadataFactory
      * @param array                    $options
      * @param RequestContext|null      $context
+     * @param LoggerInterface|null     $logger
      */
-    public function __construct(ProviderInterface $provider, MetadataFactoryInterface $metadataFactory, array $options = [], RequestContext $context = null)
+    public function __construct(
+        ProviderInterface $provider,
+        MetadataFactoryInterface $metadataFactory,
+        array $options = [],
+        RequestContext $context = null,
+        LoggerInterface $logger = null
+    )
     {
         $this->provider        = $provider;
         $this->metadataFactory = $metadataFactory;
         $this->context         = $context ?: new RequestContext;
-
-        $this->options = [
-            'cache_dir'           => null,
-            'debug'               => false,
-            'strict_requirements' => true,
-
-            'generator_class'        => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
-            'generator_base_class'   => 'Symfony\\Component\\Routing\\Generator\\UrlGenerator',
-            'generator_dumper_class' => 'Symfony\\Component\\Routing\\Generator\\Dumper\\PhpGeneratorDumper',
-
-            'matcher_class'        => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
-            'matcher_base_class'   => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
-            'matcher_dumper_class' => 'Symfony\\Component\\Routing\\Matcher\\Dumper\\PhpMatcherDumper',
-        ];
 
         $this->routePrefix = [
             'path'         => '',
@@ -131,15 +131,37 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      *
      * Available options:
      *
-     *   * cache_dir:      The cache directory (or null to disable caching)
-     *   * debug:          Whether to enable debugging or not (false by default)
+     *   * cache_dir:              The cache directory (or null to disable caching)
+     *   * debug:                  Whether to enable debugging or not (false by default)
+     *   * generator_class:        The name of a UrlGeneratorInterface implementation
+     *   * generator_base_class:   The base class for the dumped generator class
+     *   * generator_dumper_class: The name of a GeneratorDumperInterface implementation
+     *   * matcher_class:          The name of a UrlMatcherInterface implementation
+     *   * matcher_base_class:     The base class for the dumped matcher class
+     *   * matcher_dumper_class:   The class name for the dumped matcher class
+     *   * strict_requirements:    Configure strict requirement checking for generators
+     *                             implementing ConfigurableRequirementsInterface (default is true)
      *
-     * @param array $options An array of options
+     * @param array $options
      *
      * @throws \InvalidArgumentException When a unsupported option is provided
      */
     public function setOptions(array $options)
     {
+        $this->options = [
+            'cache_dir'           => null,
+            'debug'               => false,
+            'strict_requirements' => true,
+
+            'generator_class'        => SymfonyRouting\Generator\UrlGenerator::class,
+            'generator_base_class'   => SymfonyRouting\Generator\UrlGenerator::class,
+            'generator_dumper_class' => SymfonyRouting\Generator\Dumper\PhpGeneratorDumper::class,
+
+            'matcher_class'        => SymfonyRouting\Matcher\UrlMatcher::class,
+            'matcher_base_class'   => SymfonyRouting\Matcher\UrlMatcher::class,
+            'matcher_dumper_class' => SymfonyRouting\Matcher\Dumper\PhpMatcherDumper::class,
+        ];
+
         // check option names and live merge, if errors are encountered Exception will be thrown
         $invalid = [];
         foreach ($options as $key => $value) {
@@ -151,22 +173,22 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         }
 
         if ($invalid) {
-            throw new \InvalidArgumentException(sprintf('The Router does not support the following options: "%s".', implode('", "', $invalid)));
+            throw new \InvalidArgumentException(sprintf('ModularRouter does not support the following options: "%s".', implode('", "', $invalid)));
         }
     }
 
     /**
      * Sets an option.
      *
-     * @param string $key   The key
-     * @param mixed  $value The value
+     * @param string $key
+     * @param mixed  $value
      *
      * @throws \InvalidArgumentException When a unsupported option is provided
      */
     public function setOption($key, $value)
     {
         if (!array_key_exists($key, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
+            throw new \InvalidArgumentException(sprintf('ModularRouter does not support the "%s" option.', $key));
         }
 
         $this->options[$key] = $value;
@@ -175,15 +197,15 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     /**
      * Gets an option value.
      *
-     * @param string $key The key
+     * @param string $key
      *
-     * @return mixed The value
+     * @return mixed
      * @throws \InvalidArgumentException When a unsupported option is provided
      */
     public function getOption($key)
     {
         if (!array_key_exists($key, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('The Router does not support the "%s" option.', $key));
+            throw new \InvalidArgumentException(sprintf('ModularRouter does not support the "%s" option.', $key));
         }
 
         return $this->options[$key];
@@ -192,7 +214,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     /**
      * Sets the ConfigCache factory to use.
      *
-     * @param ConfigCacheFactoryInterface $configCacheFactory The factory to use
+     * @param ConfigCacheFactoryInterface $configCacheFactory
      */
     public function setConfigCacheFactory(ConfigCacheFactoryInterface $configCacheFactory)
     {
@@ -220,6 +242,14 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     public function setContext(RequestContext $context)
     {
         $this->context = $context;
+
+        foreach ($this->matchers as $matcher) {
+            $matcher->setContext($context);
+        }
+
+        foreach ($this->generators as $generator) {
+            $generator->setContext($context);
+        }
     }
 
     /**
@@ -276,8 +306,8 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
      * Sets the prefix for the path of all modular routes.
      *
      * @param string $prefix       An optional prefix to add before each pattern of the route collection
-     * @param array  $defaults     An array of default values
-     * @param array  $requirements An array of requirements
+     * @param array  $defaults     The default values of parameters in the prefix
+     * @param array  $requirements The requirements of parameters in the prefix
      */
     public function setRoutePrefix($prefix, array $defaults = [], array $requirements = [])
     {
@@ -289,7 +319,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
     }
 
     /**
-     * Returns a generator for a Module.
+     * Returns a generator for a module.
      *
      * @param ModuleInterface $module
      *
@@ -305,7 +335,7 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
         }
 
         if (null === $this->options['cache_dir']) {
-            return $this->generators[$type] = new $this->options['generator_class']($collection, $this->context);
+            return $this->generators[$type] = new $this->options['generator_class']($collection, $this->context, $this->logger);
         }
 
         $cacheClass = sprintf('%s_UrlGenerator', $type);
@@ -326,11 +356,11 @@ class ModularRouter implements RouterInterface, RequestMatcherInterface, Chained
 
         require_once $cache->getPath();
 
-        return $this->generators[$type] = new $cacheClass($this->context);
+        return $this->generators[$type] = new $cacheClass($this->context, $this->logger);
     }
 
     /**
-     * Returns a matcher for a Module.
+     * Returns a matcher for a module.
      *
      * @param ModuleInterface $module
      *

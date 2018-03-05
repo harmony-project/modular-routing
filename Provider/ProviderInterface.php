@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Returns RouteCollection objects for Module instances.
+ * Interface for {@link ModuleInterface} loaders.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -30,9 +30,9 @@ interface ProviderInterface
     public function addModularPrefix(RouteCollection $routes);
 
     /**
-     * Loads the Module instance by a set of parameters.
+     * Loads a module by a set of parameters.
      *
-     * @param array $parameters Parameters to match
+     * @param array $parameters The parameters to match
      *
      * @return ModuleInterface
      * @throws \InvalidArgumentException If one of the parameters has an invalid value
@@ -41,7 +41,7 @@ interface ProviderInterface
     public function loadModuleByParameters(array $parameters);
 
     /**
-     * Loads the Module instance associated with a request.
+     * Loads a module associated with a request.
      *
      * If the request does not have a module attribute, this method can require the following
      * parameters to be set to match the request to a Module:
@@ -50,7 +50,7 @@ interface ProviderInterface
      *                    a module.
      *
      * @param Request $request    The request to match
-     * @param array   $parameters Parameters returned by an UrlMatcher
+     * @param array   $parameters Additional parameters
      *
      * @return ModuleInterface
      * @throws \InvalidArgumentException If one of the parameters has an invalid value

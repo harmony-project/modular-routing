@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
- * Handle events regarding modular entities.
+ * Handle Doctrine events regarding modular entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -129,9 +129,9 @@ class ModularSubscriber implements EventSubscriber
     /**
      * Checks whether the entity inherits ModularTrait.
      *
-     * @param ClassMetadata $classMetadata Metadata of the class
+     * @param ClassMetadata $classMetadata
      *
-     * @return bool
+     * @return boolean
      */
     private function isModular(ClassMetadata $classMetadata)
     {

@@ -55,10 +55,8 @@ class MetadataFactory implements MetadataFactoryInterface
     private $resourceType;
 
     /**
-     * MetadataFactory constructor
-     *
-     * @param LoaderInterface $metadataLoader A metadata loader instance
-     * @param LoaderInterface $routingLoader  A routing loader instance
+     * @param LoaderInterface $metadataLoader
+     * @param LoaderInterface $routingLoader
      * @param mixed           $resource       The main resource to load
      * @param string          $resourceType   Type hint for the main resource (optional)
      */
@@ -110,6 +108,7 @@ class MetadataFactory implements MetadataFactoryInterface
      * @param string $value
      *
      * @return ModuleMetadata
+     * @throws \Exception              If the routing data is invalid
      * @throws NoSuchMetadataException If no metadata exists for the given value
      */
     protected function loadMetadataFor($value)
@@ -149,6 +148,7 @@ class MetadataFactory implements MetadataFactoryInterface
      * Returns the metadata definitions
      *
      * @return array|bool
+     * @throws \Exception If the metadata is invalid
      */
     public function getDefinitions()
     {

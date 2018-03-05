@@ -11,7 +11,7 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * Interface implemented by modules.
+ * Interface for modules.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */

@@ -12,7 +12,7 @@ namespace Harmony\Component\ModularRouting\Manager;
 use Harmony\Component\ModularRouting\Model\StaticModule;
 
 /**
- * Manager that creates modules during runtime.
+ * A module manager that creates modules during runtime.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */

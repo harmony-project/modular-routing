@@ -11,7 +11,7 @@
 namespace Harmony\Component\ModularRouting\Model;
 
 /**
- * To be embedded in entities that are mapped to a module.
+ * Trait implementing {@link ModularInterface} methods.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -23,6 +23,8 @@ trait ModularTrait
     protected $module;
 
     /**
+     * Sets the associated module.
+     *
      * @param ModuleInterface|null $module
      *
      * @return self
@@ -35,6 +37,8 @@ trait ModularTrait
     }
 
     /**
+     * Returns the associated module.
+     *
      * @return ModuleInterface
      */
     public function getModule()

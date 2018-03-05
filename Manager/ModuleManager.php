@@ -13,7 +13,7 @@ namespace Harmony\Component\ModularRouting\Manager;
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 
 /**
- * Interacts with Module entities.
+ * Abstract class for interacting with modules.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -28,7 +28,7 @@ abstract class ModuleManager implements ModuleManagerInterface
     private $currentModule = null;
 
     /**
-     * An optional value a ModuleManager can use to identify a module.
+     * An optional value the module manager can use to identify a module.
      *
      * @var string|null
      */

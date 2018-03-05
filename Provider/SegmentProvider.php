@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Returns Module instances based on a segment of the request path.
+ * Loads {@link ModuleInterface} instances based on a segment of the request path.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -51,8 +51,8 @@ class SegmentProvider implements ProviderInterface
     /**
      * {@inheritdoc}
      * 
-     * The "module" parameter is required to map the Module object,
-     * this can be either the Module object or identity.
+     * The "module" parameter is required to map the correct module, this
+     * can either be a {@link ModuleInterface} object or its identity.
      */
     public function loadModuleByParameters(array $parameters)
     {
@@ -103,12 +103,13 @@ class SegmentProvider implements ProviderInterface
     }
 
     /**
-     * Filters the Module identity from the request path.
+     * Filters the module identity from the request path.
      *
      * @param Request $request    The request to match
      * @param array   $parameters Parameters returned by an UrlMatcher
      *
      * @return string
+     * @throws \InvalidArgumentException If the "_modular_path" parameter is not set
      */
     protected function matchRequest(Request $request, array $parameters = [])
     {
@@ -116,10 +117,10 @@ class SegmentProvider implements ProviderInterface
             throw new \InvalidArgumentException('The routing provider expected parameter "_modular_path" but could not find it.');
         }
 
-        // Match the module in _modular_path
+        // Grab the first segment from the remaining path
         $path = $parameters['_modular_path'];
-        $pos  = strpos($path, '/');
+        $position = strpos($path, '/');
 
-        return $pos ? substr($path, 0, $pos) : $path;
+        return $position ? substr($path, 0, $position) : $path;
     }
 }

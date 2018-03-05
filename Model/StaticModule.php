@@ -10,12 +10,15 @@
 
 namespace Harmony\Component\ModularRouting\Model;
 
+use Harmony\Component\ModularRouting\Manager\StaticModuleManager;
+
 /**
- * Simple implementation of ModuleInterface using the module type as its identity.
+ * Simple implementation of {@link ModuleInterface} using the module type as
+ * its identity. Can be used with {@link StaticModuleManager}.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
-class StaticModule extends Module
+class StaticModule implements ModuleInterface
 {
     /**
      * @var string
@@ -23,7 +26,7 @@ class StaticModule extends Module
     protected $modularType;
 
     /**
-     * Returns the identity of the module.
+     * Returns a value to identify the module.
      *
      * @return mixed
      */

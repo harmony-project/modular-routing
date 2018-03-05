@@ -15,7 +15,7 @@ use Harmony\Component\ModularRouting\Model\ModularRepositoryTrait as BaseReposit
 use Harmony\Component\ModularRouting\Model\ModuleInterface;
 
 /**
- * Adds useful Doctrine-based repository methods for modular entities.
+ * Adds Doctrine-based repository methods for modular entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
@@ -35,11 +35,13 @@ trait ModularRepositoryTrait
      */
     public function findByModule(ModuleInterface $module = null, array $orderBy = null, $limit = null, $offset = null)
     {
-        /** @var EntityRepository $this */
+        $criteria = [];
+
         if ($this->isModular($module)) {
-            return $this->findBy(['module' => $module], $orderBy, $limit, $offset);
+            $criteria['module'] = $module;
         }
 
+        /** @var EntityRepository $this */
         return $this->findBy([], $orderBy, $limit, $offset);
     }
 }
