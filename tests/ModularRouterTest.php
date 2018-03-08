@@ -49,7 +49,7 @@ class ModularRouterTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The Router does not support the following options: "option_foo", "option_bar"
+     * @expectedExceptionMessage ModularRouter does not support the following options: "option_foo", "option_bar"
      */
     public function testSetOptionsWithUnsupportedOptions()
     {
@@ -69,7 +69,7 @@ class ModularRouterTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The Router does not support the "option_foo" option
+     * @expectedExceptionMessage ModularRouter does not support the "option_foo" option
      */
     public function testSetOptionWithUnsupportedOption()
     {
@@ -78,7 +78,7 @@ class ModularRouterTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The Router does not support the "option_foo" option
+     * @expectedExceptionMessage ModularRouter does not support the "option_foo" option
      */
     public function testGetOptionWithUnsupportedOption()
     {
