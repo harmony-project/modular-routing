@@ -10,28 +10,31 @@
 
 namespace Harmony\Component\ModularRouting\Tests\Provider;
 
-use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
+use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
+use Harmony\Component\ModularRouting\Module;
 use Harmony\Component\ModularRouting\Provider\SegmentProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouteCollection;
 
 class SegmentProviderTest extends TestCase
 {
+    /** @var ModuleManagerInterface|MockObject */
     private $manager;
 
+    /** @var SegmentProvider */
     private $provider;
 
     public function setUp()
     {
-        $this->manager = $this->createMock('Harmony\Component\ModularRouting\Manager\ModuleManagerInterface');
+        $this->manager = $this->createMock(ModuleManagerInterface::class);
 
         $this->provider = new SegmentProvider($this->manager);
     }
 
     public function testLoadModuleByParametersWithId()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
+        $module = $this->createMock(Module::class);
 
         $this->manager->expects($this->once())
             ->method('findModuleByIdentity')->with(1)
@@ -42,7 +45,7 @@ class SegmentProviderTest extends TestCase
 
     public function testLoadModuleByParametersWithModule()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
+        $module = $this->createMock(Module::class);
 
         $this->assertEquals($module, $this->provider->loadModuleByParameters(['module' => $module]));
     }
@@ -52,7 +55,7 @@ class SegmentProviderTest extends TestCase
      */
     public function testLoadModuleByRequest($request, $parameters)
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
+        $module = $this->createMock(Module::class);
 
         $this->manager->expects($this->once())
             ->method('findModuleByIdentity')->with(1)
@@ -87,7 +90,7 @@ class SegmentProviderTest extends TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      * @dataProvider getInvalidRequests
      */
     public function testLoadModuleByRequestThrowsExceptionOnInvalidPath($request, $parameters)
@@ -121,7 +124,7 @@ class SegmentProviderTest extends TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testLoadModuleByRequestThrowsExceptionOnInvalidModule()
     {

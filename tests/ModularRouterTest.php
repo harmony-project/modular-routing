@@ -10,8 +10,12 @@
 
 namespace Harmony\Component\ModularRouting\Tests;
 
+use Harmony\Component\ModularRouting\Metadata\MetadataFactory;
 use Harmony\Component\ModularRouting\Metadata\ModuleMetadata;
 use Harmony\Component\ModularRouting\ModularRouter;
+use Harmony\Component\ModularRouting\Module;
+use Harmony\Component\ModularRouting\Provider\ProviderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
@@ -19,19 +23,22 @@ use Symfony\Component\Routing\RouteCollection;
 
 class ModularRouterTest extends TestCase
 {
+    /** @var MetadataFactory|MockObject */
     private $factory;
-    
+
+    /** @var ModularRouter */
     private $router;
 
+    /** @var ProviderInterface|MockObject */
     private $provider = null;
 
     protected function setUp()
     {
         $this->factory = $this
-            ->getMockBuilder('Harmony\Component\ModularRouting\Metadata\MetadataFactory')
+            ->getMockBuilder(MetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->provider = $this->createMock('Harmony\Component\ModularRouting\Provider\ProviderInterface');
+        $this->provider = $this->createMock(ProviderInterface::class);
 
         $this->router = new ModularRouter($this->provider, $this->factory);
     }
@@ -82,12 +89,12 @@ class ModularRouterTest extends TestCase
      */
     public function testGetOptionWithUnsupportedOption()
     {
-        $this->router->getOption('option_foo', true);
+        $this->router->getOption('option_foo');
     }
 
     public function testGenerateWithId()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
+        $module = $this->createMock(Module::class);
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -114,7 +121,7 @@ class ModularRouterTest extends TestCase
 
     public function testGenerateWithModule()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
+        $module = $this->createMock(Module::class);
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -145,12 +152,8 @@ class ModularRouterTest extends TestCase
      */
     public function testGenerateWithInvalidParameters()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
-
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
-
-        $metadata = new ModuleMetadata('Foo', 'foo', $routes);
 
         $this->provider->expects($this->once())
             ->method('loadModuleByParameters')
@@ -161,7 +164,7 @@ class ModularRouterTest extends TestCase
 
     public function testMatchRequest()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
+        $module = $this->createMock(Module::class);
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));

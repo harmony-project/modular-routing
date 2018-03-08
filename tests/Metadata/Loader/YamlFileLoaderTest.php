@@ -18,7 +18,7 @@ class YamlFileLoaderTest extends TestCase
 {
     public function testSupports()
     {
-        $loader = new YamlFileLoader($this->createMock('Symfony\Component\Config\FileLocator'));
+        $loader = new YamlFileLoader(new FileLocator([__DIR__ . '/../../Fixtures']));
 
         $this->assertTrue($loader->supports('foo.yml'), '->supports() returns true if the resource is loadable');
         $this->assertTrue($loader->supports('foo.yaml'), '->supports() returns true if the resource is loadable');
