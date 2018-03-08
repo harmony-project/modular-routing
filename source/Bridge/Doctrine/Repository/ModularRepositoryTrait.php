@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Doctrine;
+namespace Harmony\Component\ModularRouting\Bridge\Doctrine\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Harmony\Component\ModularRouting\Model\ModularRepositoryTrait as BaseRepositoryTrait;
-use Harmony\Component\ModularRouting\Model\ModuleInterface;
+use Harmony\Component\ModularRouting\Repository\ModularRepositoryTrait as BaseRepositoryTrait;
+use Harmony\Component\ModularRouting\ModuleInterface;
 
 /**
  * Adds Doctrine-based repository methods for modular entities.
@@ -28,8 +28,8 @@ trait ModularRepositoryTrait
      *
      * @param ModuleInterface|null $module
      * @param array|null           $orderBy
-     * @param int|null             $limit
-     * @param int|null             $offset
+     * @param integer|null         $limit
+     * @param integer|null         $offset
      *
      * @return mixed
      */
@@ -42,6 +42,6 @@ trait ModularRepositoryTrait
         }
 
         /** @var EntityRepository $this */
-        return $this->findBy([], $orderBy, $limit, $offset);
+        return $this->findBy($criteria, $orderBy, $limit, $offset);
     }
 }

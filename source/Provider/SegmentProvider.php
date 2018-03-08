@@ -11,7 +11,7 @@
 namespace Harmony\Component\ModularRouting\Provider;
 
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
-use Harmony\Component\ModularRouting\Model\ModuleInterface;
+use Harmony\Component\ModularRouting\ModuleInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouteCollection;

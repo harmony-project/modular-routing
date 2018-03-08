@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Model;
+namespace Harmony\Component\ModularRouting;
 
 /**
  * Basic extendable implementation of {@link ModuleInterface}.
@@ -17,15 +17,12 @@ namespace Harmony\Component\ModularRouting\Model;
  */
 abstract class Module implements ModuleInterface
 {
+    use ModuleTrait;
+
     /**
      * @var integer
      */
     protected $id;
-
-    /**
-     * @var string
-     */
-    protected $modularType;
 
     /**
      * Returns the id of the module.
@@ -42,24 +39,6 @@ abstract class Module implements ModuleInterface
      */
     public function getModularIdentity()
     {
-        return $this->getId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setModularType($type)
-    {
-        $this->modularType = $type;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getModularType()
-    {
-        return $this->modularType;
+        return $this->getModularType();
     }
 }

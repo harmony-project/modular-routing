@@ -8,40 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Model;
-
-use Harmony\Component\ModularRouting\Manager\StaticModuleManager;
+namespace Harmony\Component\ModularRouting;
 
 /**
- * Simple implementation of {@link ModuleInterface} using the module type as
- * its identity. Can be used with {@link StaticModuleManager}.
+ * Trait implementing {@link ModuleInterface} methods.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
-class StaticModule implements ModuleInterface
+trait ModuleTrait
 {
     /**
      * @var string
      */
     protected $modularType;
-
-    /**
-     * Returns a value to identify the module.
-     *
-     * @return mixed
-     */
-    public function __toString()
-    {
-        return $this->modularType;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getModularIdentity()
-    {
-        return $this->modularType;
-    }
 
     /**
      * {@inheritdoc}

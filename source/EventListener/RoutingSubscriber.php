@@ -11,7 +11,7 @@
 namespace Harmony\Component\ModularRouting\EventListener;
 
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
-use Harmony\Component\ModularRouting\Model\ModuleInterface;
+use Harmony\Component\ModularRouting\ModuleInterface;
 use Harmony\Component\ModularRouting\ModularRouter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

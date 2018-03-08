@@ -11,7 +11,6 @@
 namespace Harmony\Component\ModularRouting;
 
 use Harmony\Component\ModularRouting\Metadata\MetadataFactoryInterface;
-use Harmony\Component\ModularRouting\Model\ModuleInterface;
 use Harmony\Component\ModularRouting\Provider\ProviderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;

@@ -8,7 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Model;
+namespace Harmony\Component\ModularRouting\Repository;
+
+use Harmony\Component\ModularRouting\ModuleInterface;
+use Harmony\Component\ModularRouting\StaticModule;
 
 /**
  * Adds useful repository methods for modular entities.

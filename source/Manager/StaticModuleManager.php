@@ -9,7 +9,7 @@
  */
 
 namespace Harmony\Component\ModularRouting\Manager;
-use Harmony\Component\ModularRouting\Model\StaticModule;
+use Harmony\Component\ModularRouting\StaticModule;
 
 /**
  * A module manager that creates modules during runtime.

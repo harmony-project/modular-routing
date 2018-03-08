@@ -31,7 +31,7 @@ class SegmentProviderTest extends TestCase
 
     public function testLoadModuleByParametersWithId()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $this->manager->expects($this->once())
             ->method('findModuleByIdentity')->with(1)
@@ -42,7 +42,7 @@ class SegmentProviderTest extends TestCase
 
     public function testLoadModuleByParametersWithModule()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $this->assertEquals($module, $this->provider->loadModuleByParameters(['module' => $module]));
     }
@@ -52,7 +52,7 @@ class SegmentProviderTest extends TestCase
      */
     public function testLoadModuleByRequest($request, $parameters)
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $this->manager->expects($this->once())
             ->method('findModuleByIdentity')->with(1)

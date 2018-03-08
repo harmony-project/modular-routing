@@ -87,7 +87,7 @@ class ModularRouterTest extends TestCase
 
     public function testGenerateWithId()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -114,7 +114,7 @@ class ModularRouterTest extends TestCase
 
     public function testGenerateWithModule()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -145,7 +145,7 @@ class ModularRouterTest extends TestCase
      */
     public function testGenerateWithInvalidParameters()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));
@@ -161,7 +161,7 @@ class ModularRouterTest extends TestCase
 
     public function testMatchRequest()
     {
-        $module = $this->createMock('Harmony\Component\ModularRouting\Model\Module');
+        $module = $this->createMock('Harmony\Component\ModularRouting\Module');
 
         $routes = new RouteCollection;
         $routes->add('bar', new Route('/module/{module}'));

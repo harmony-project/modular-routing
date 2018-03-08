@@ -10,7 +10,7 @@
 
 namespace Harmony\Component\ModularRouting\Manager;
 
-use Harmony\Component\ModularRouting\Model\ModuleInterface;
+use Harmony\Component\ModularRouting\ModuleInterface;
 
 /**
  * Interface for module managers.

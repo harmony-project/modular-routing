@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Doctrine;
+namespace Harmony\Component\ModularRouting\Bridge\Doctrine\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -84,7 +84,7 @@ class ModularSubscriber implements EventSubscriber
 
         if (null === $classMetadata->getReflectionClass() ||
             false == $this->isModular($classMetadata) ||
-            'Harmony\Component\ModularRouting\Model\StaticModule' == $this->getModuleClass() ||
+            'Harmony\Component\ModularRouting\StaticModule' == $this->getModuleClass() ||
             $classMetadata->hasField('module') || $classMetadata->hasAssociation('module')) {
 
             return;
@@ -137,7 +137,7 @@ class ModularSubscriber implements EventSubscriber
     {
         $class = $classMetadata->getReflectionClass();
 
-        if (in_array('Harmony\Component\ModularRouting\Model\ModularInterface', $class->getInterfaceNames())) {
+        if (in_array('Harmony\Component\ModularRouting\ModularInterface', $class->getInterfaceNames())) {
             return true;
         }
 
