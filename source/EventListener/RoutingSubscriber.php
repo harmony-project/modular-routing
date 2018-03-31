@@ -71,7 +71,7 @@ class RoutingSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Handle actions before the kernel matches the controller.
+     * Handles actions before the kernel matches the controller.
      *
      * @param GetResponseEvent $event
      */
@@ -82,14 +82,10 @@ class RoutingSubscriber implements EventSubscriberInterface
         }
 
         if (!$module instanceof ModuleInterface) {
-            try {
-                $module = $this->getModularRouter()->getModuleByRequest($event->getRequest());
-            }
-            catch (\Exception $e) {
-                return;
-            }
+            $module = $this->getModularRouter()->getModuleByRequest($event->getRequest());
         }
 
+        // todo remove current module functionality, as it can lead to unexpected behavior
         $this->getModuleManager()->setCurrentModule($module);
     }
 }
