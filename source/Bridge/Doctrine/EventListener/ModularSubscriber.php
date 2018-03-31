@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Harmony\Component\ModularRouting\Manager\ModuleManagerInterface;
 
 /**
- * Handle Doctrine events regarding modular entities.
+ * Handles Doctrine events regarding modular entities.
  *
  * @author Tim Goudriaan <tim@harmony-project.io>
  */
