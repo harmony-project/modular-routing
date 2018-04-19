@@ -5,22 +5,24 @@ php:
   - 7.2
 
 env:
-  - SYMFONY_VERSION=3.4.x CMF_VERSION=^2.0
-  - SYMFONY_VERSION=4.0.x CMF_VERSION=dev-master
+  - SYMFONY_VERSION=^3.4 CMF_VERSION=^2.0
+  - SYMFONY_VERSION=^4.0 CMF_VERSION=dev-master
   - SYMFONY_VERSION=dev-master CMF_VERSION=dev-master
 
 before_script:
-  - composer require "symfony/config:${SYMFONY_VERSION}"
-  - composer require "symfony/event-dispatcher:${SYMFONY_VERSION}"
-  - composer require "symfony/http-foundation:${SYMFONY_VERSION}"
-  - composer require "symfony/routing:${SYMFONY_VERSION}"
-  - composer require "symfony/yaml:${SYMFONY_VERSION}"
-  - composer require "symfony-cmf/routing:${CMF_VERSION}"
+  - |
+    composer require \
+    "symfony/config:${SYMFONY_VERSION}" \
+    "symfony/event-dispatcher:${SYMFONY_VERSION}" \
+    "symfony/http-foundation:${SYMFONY_VERSION}" \
+    "symfony/routing:${SYMFONY_VERSION}" \
+    "symfony/yaml:${SYMFONY_VERSION}" \
+    "symfony-cmf/routing:${CMF_VERSION}"
 
 script:
   - ./vendor/bin/phpunit --coverage-text
 
 matrix:
   allow_failures:
-    - env: SYMFONY_VERSION=4.0.x CMF_VERSION=dev-master
+    - env: SYMFONY_VERSION=^4.0 CMF_VERSION=dev-master
     - env: SYMFONY_VERSION=dev-master CMF_VERSION=dev-master
