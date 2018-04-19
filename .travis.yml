@@ -10,7 +10,12 @@ env:
   - SYMFONY_VERSION=dev-master CMF_VERSION=dev-master
 
 before_script:
-  - composer require "symfony/config:${SYMFONY_VERSION}" "symfony/http-foundation:${SYMFONY_VERSION}" "symfony/routing:${SYMFONY_VERSION}" "symfony/yaml:${SYMFONY_VERSION}" "symfony-cmf/routing:${CMF_VERSION}"
+  - composer require "symfony/config:${SYMFONY_VERSION}"
+  - composer require "symfony/event-dispatcher:${SYMFONY_VERSION}"
+  - composer require "symfony/http-foundation:${SYMFONY_VERSION}"
+  - composer require "symfony/routing:${SYMFONY_VERSION}"
+  - composer require "symfony/yaml:${SYMFONY_VERSION}"
+  - composer require "symfony-cmf/routing:${CMF_VERSION}"
 
 script:
   - ./vendor/bin/phpunit --coverage-text
