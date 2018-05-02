@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Harmony\Component\ModularRouting\Model;
+namespace Harmony\Component\ModularRouting\Repository;
 
 /**
  * Interface for (entity) repositories of objects implementing {@link ModularInterface}.
