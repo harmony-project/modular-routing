@@ -1,7 +1,7 @@
 {
   "name": "harmony-project/modular-routing",
-  "description": "An implementation of the Symfony router using a customizable matching process",
-  "keywords": ["routing", "modular", "database"],
+  "description": "An implementation of the Symfony router using a customizable matching process optimized for reusable routes",
+  "keywords": ["modular", "modules", "routing", "database"],
   "homepage": "http://harmony-project.io",
   "license": "MIT",
   "authors": [
